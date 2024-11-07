@@ -1,6 +1,9 @@
 import React from 'react';
 import '@fontsource/inter';
+import { useAuth } from './UserData';
 const Nav: React.FC = () => {
+  const { token, logout } = useAuth();
+
   return (
     <nav style={styles.nav}>
       <div style={styles.logoWrapper}>
@@ -9,10 +12,10 @@ const Nav: React.FC = () => {
       <ul style={styles.navList}>
         <li style={styles.navItem}><a href="/" style={styles.navLink}>Home</a></li>
         <li style={styles.navItem}><a href="/about" style={styles.navLink}>About</a></li>
-        {true ? (
+        {token ? (
           <>
             <li style={styles.navItem}><a href="/profile" style={styles.navLink}>Profile</a></li>
-            <li style={styles.navItem}><a onClick={() => {}} href="/" style={styles.navLink}>Logout</a></li>
+            <li style={styles.navItem}><a onClick={logout} href="/" style={styles.navLink}>Logout</a></li>
           </>
         ) : (
           <>
