@@ -1,5 +1,7 @@
 import React from 'react';
 import BookSlider from './BookSlider';
+import { useAuth } from './UserData';
+import LoadingSpinner from './LoadingSpinner';
 
 const books = [
   { id: '1', image: 'atomowe-nawyki.jpg' },
@@ -12,6 +14,8 @@ const books = [
 ];
 
 const HomeView: React.FC = () => {
+  const { token } = useAuth();
+  
   return (
     <div style={styles.container}>
       <header style={styles.header}>
@@ -26,7 +30,7 @@ const HomeView: React.FC = () => {
       </div>
 
       <div style={styles.buttonContainer}>
-        {false ? (
+        {token ? (
           <button style={styles.button} onClick={() => {}}>Wyloguj się</button>
         ) : (
           <>
