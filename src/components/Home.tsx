@@ -2,6 +2,7 @@ import React from 'react';
 import BookSlider from './BookSlider';
 import { useAuth } from './UserData';
 import LoadingSpinner from './LoadingSpinner';
+import { useNavigate } from 'react-router-dom';
 
 const books = [
   { id: '1', image: 'atomowe-nawyki.jpg' },
@@ -14,8 +15,17 @@ const books = [
 ];
 
 const HomeView: React.FC = () => {
-  const { token } = useAuth();
-  
+  const { token, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    navigate("/login")
+  }
+
+  const handleRegister = () => {
+    navigate("/register")
+  }
+
   return (
     <div style={styles.container}>
       <header style={styles.header}>
@@ -31,11 +41,11 @@ const HomeView: React.FC = () => {
 
       <div style={styles.buttonContainer}>
         {token ? (
-          <button style={styles.button} onClick={() => {}}>Wyloguj się</button>
+          <button style={styles.button} onClick={logout}>Wyloguj się</button>
         ) : (
           <>
-            <button style={styles.button} onClick={() => {}}>Zarejestruj się</button>
-            <button style={styles.button} onClick={() => {}}>Zaloguj się</button>
+            <button style={styles.button} onClick={handleRegister}>Zarejestruj się</button>
+            <button style={styles.button} onClick={handleLogin}>Zaloguj się</button>
           </>
         )}
       </div>
