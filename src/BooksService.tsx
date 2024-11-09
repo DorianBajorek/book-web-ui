@@ -74,3 +74,19 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
     return null;
   }
 }
+
+export const getOfferById = async (token: string, offerId: string) => {
+  try {
+    const url = `http://0.0.0.0:8000/books/v1/get_offer/${offerId}/`;
+    console.log("ATAKUJE")
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching offer details', error);
+    return null;
+  }
+};

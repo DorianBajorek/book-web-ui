@@ -28,8 +28,8 @@ const BooksList = () => {
     fetchBooks();
   }, [token]);
 
-  const handleBookClick = (book: Book) => {
-    navigate('/book-details', { state: { book, owner: login } });
+  const handleBookClick = (offer_id: number) => {
+    navigate(`/book-details/${offer_id.toString()}`);
   };
 
   return (
@@ -41,7 +41,7 @@ const BooksList = () => {
       {books.map((item) => (
         <div 
           key={item.offer_id} 
-          onClick={() => handleBookClick(item)} 
+          onClick={() => handleBookClick(item.offer_id)} 
           style={styles.bookContainer}
         >
           <img 
@@ -52,7 +52,7 @@ const BooksList = () => {
           <div style={styles.textContainer}>
             <h3 style={styles.bookTitle}>{item.title}</h3>
             <p style={styles.bookDescription}>Autor: {item.author || "Brak"}</p>
-            <p style={styles.bookDescription}>Cena: {"20"}</p>
+            <p style={styles.bookDescription}>Cena: {"20 PLN"}</p>
           </div>
         </div>
       ))}
@@ -101,9 +101,10 @@ const styles: { [key: string]: CSSProperties } = {
   bookDescription: {
     fontSize: '14px',
     color: '#777',
+    fontWeight: "600",
     marginTop: '4px',
-    lineHeight: '20px',
     textAlign: 'left',
+    marginBottom: "-4px"
   },
 };
 

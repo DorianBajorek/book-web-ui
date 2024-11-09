@@ -1,41 +1,44 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { deleteOffer } from '../BooksService';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getOfferById } from '../BooksService';
 import { useAuth } from './UserData';
+import { Book } from './Constant';
 
 const BookDetails: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { book, owner } = location.state;
-  const { login, token, setIsDeleteOfferInProgress, isDeleteOfferInProgress } = useAuth();
+  const { offer_id } = useParams();
+  const { token } = useAuth();
 
+  const [book, setBook] = useState<Book>();
+  const [owner, setOwner] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (offer_id) {
+      const fetchBook = async () => {
+        try {
+          const data = await getOfferById(token, offer_id);
+          if (data) {
+            setBook(data);
+            setOwner(data.username);
+          }
+        } catch (error) {
+          console.error("Failed to fetch book details", error);
+        }
+      };
+
+      fetchBook();
+    }
+  }, [offer_id, token]);
+
+  if (!book) {
+    return <div>Loading...</div>;
+  }
 
   const images = [
     { id: '1', image: { uri: book.cover_book.replace("/media/", "/media/cover_images/") } },
     ...(book.frontImage ? [{ id: '2', image: { uri: book.frontImage } }] : []),
     ...(book.backImage ? [{ id: '3', image: { uri: book.backImage } }] : []),
   ];
-
-  const handleDeleteOffer = async () => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this offer?");
-    if (confirmDelete) {
-      try {
-        setIsDeleteOfferInProgress(true);
-        await deleteOffer(token, book.offer_id);
-        setIsDeleteOfferInProgress(false);
-        alert("Offer deleted successfully.");
-        navigate(-1);
-      } catch (error) {
-        alert("Failed to delete the offer.");
-        console.error(error);
-      }
-    }
-  };
-
-  const handleSendMessageToOwner = () => {
-    navigate('/chat', { state: { recipient: owner } });
-  };
 
   const handleImageClick = (uri: string) => {
     setSelectedImage(uri);
@@ -48,49 +51,24 @@ const BookDetails: React.FC = () => {
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
+        <h2 style={bookTitleStyle}>{book.title}</h2>
         <div style={imagesContainerStyle}>
-          {images.map((item) => (
-            <div key={item.id} style={bookContainerStyle}>
+          {images.map((image) => (
+            <div key={image.id} style={bookContainerStyle}>
               <img
-                src={item.image.uri}
-                alt="Book Cover"
+                src={image.image.uri}
+                alt={`Book image ${image.id}`}
                 style={bookImageStyle}
-                onClick={() => handleImageClick(item.image.uri)}
+                onClick={() => handleImageClick(image.image.uri)}
               />
             </div>
           ))}
         </div>
-        <h2 style={bookTitleStyle}>{book.title}</h2>
-        <p style={bookDescriptionStyle}>
-          {book.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum."}
-        </p>
-
         <div style={detailsContainerStyle}>
-          <p style={bookDetailStyle}>
-            <span style={labelStyle}>Autor: </span>{book.author || "Brak"}
-          </p>
-          <p style={bookDetailStyle}>
-            <span style={labelStyle}>Użytkownik: </span>{owner}
-          </p>
-          <p style={bookDetailStyle}>
-            <span style={labelStyle}>ISBN: </span>{book.isbn}
-          </p>
-          <p style={bookDetailStyle}>
-            <span style={labelStyle}>Cena: </span>20
-          </p>
+          <p><b>Autor:</b> {book.author || 'Brak'}</p>
+          <p><b>Użytkownik:</b> {owner}</p>
+          <p><b>Cena:</b> 20 PLN</p>
         </div>
-      </div>
-
-      <div style={buttonContainerStyle}>
-        {login !== owner ? (
-          <button style={buttonStyle} onClick={handleSendMessageToOwner}>
-            Napisz wiadomość do właściciela
-          </button>
-        ) : (
-          <button style={{ ...buttonStyle, ...deleteButtonStyle }} onClick={handleDeleteOffer}>
-            Usuń ofertę
-          </button>
-        )}
       </div>
 
       {selectedImage && (
@@ -134,78 +112,39 @@ const bookTitleStyle: React.CSSProperties = {
   color: '#333',
 };
 
-const bookDescriptionStyle: React.CSSProperties = {
-  fontSize: '16px',
-  marginBottom: '15px',
-  color: '#666',
-};
-
 const detailsContainerStyle: React.CSSProperties = {
+  color: "#666",
   textAlign: 'left',
   width: '100%',
   marginTop: '10px',
+  fontWeight: '500'
 };
 
-const bookDetailStyle: React.CSSProperties = {
-  fontSize: '16px',
-  marginBottom: '8px',
-  color: '#555',
-};
-
-const labelStyle: React.CSSProperties = {
-  fontWeight: 'bold',
-  color: '#333',
-};
-
-const buttonContainerStyle: React.CSSProperties = {
+const bookImageStyle: React.CSSProperties = {
   width: '100%',
-  maxWidth: '600px',
-  padding: '0 20px',
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: '10px',
-};
-
-const buttonStyle: React.CSSProperties = {
-  backgroundColor: '#007bff',
-  borderRadius: '5px',
-  padding: '15px',
-  color: '#fff',
-  fontSize: '16px',
-  fontWeight: '500',
+  height: '200px', // Możesz ustawić stałą wysokość, aby zapewnić równość rozmiarów
+  objectFit: 'cover', // Zapewnia, że zdjęcie wypełnia kontener, zachowując proporcje
+  display: 'block',
+  borderRadius: '10px',
   cursor: 'pointer',
-  width: '100%',
-  textAlign: 'center',
-  border: "0px"
-};
-
-const deleteButtonStyle: React.CSSProperties = {
-  backgroundColor: 'red',
+  transition: 'transform 0.3s ease-in-out',
 };
 
 const imagesContainerStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   marginBottom: '20px',
+  gap: '10px'
 };
-const bookImageStyle: React.CSSProperties = {
-    width: '100%',
-    maxHeight: '250px',
-    objectFit: 'contain',
-    display: 'block',
-    borderRadius: '10px',
-    overflow: 'hidden',
-    cursor: 'pointer',
-  };
-  
-  const bookContainerStyle: React.CSSProperties = {
-    width: '30%',
-    marginRight: '10px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    overflow: 'hidden',
-  };
+
+const bookContainerStyle: React.CSSProperties = {
+  flex: '1',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  overflow: 'hidden',
+  maxWidth: '30%',
+};
 
 const modalOverlayStyle: React.CSSProperties = {
   position: 'fixed',
