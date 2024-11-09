@@ -3,25 +3,25 @@ import { getUserOffers } from '../BooksService';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
-import LoadingSpinner from './LoadingSpinner';  // Importowanie komponentu LoadingSpinner
+import LoadingSpinner from './LoadingSpinner';
 
 const BooksList = () => {
   const { token, login } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
-  const [isLoading, setIsLoading] = useState(true);  // Stan do kontrolowania ładowania książek
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const data = await getUserOffers(token);
-        if(data){
-            setBooks(data);
+        if (data) {
+          setBooks(data);
         }
       } catch (error) {
         console.error('Error fetching books:', error);
       } finally {
-        setIsLoading(false);  // Po zakończeniu ładowania ustawiamy isLoading na false
+        setIsLoading(false);
       }
     };
 
@@ -34,9 +34,9 @@ const BooksList = () => {
 
   return (
     <div style={styles.container}>
-      <LoadingSpinner visible={isLoading} />  {/* Pokazanie spinnera, gdy książki się ładują */}
+      <LoadingSpinner visible={isLoading} />
       
-      {!isLoading && books.length === 0 && <p>Brak książek do wyświetlenia.</p>} {/* Komunikat, jeśli brak książek */}
+      {!isLoading && books.length === 0 && <p>Brak książek do wyświetlenia.</p>}
 
       {books.map((item) => (
         <div 
@@ -52,6 +52,7 @@ const BooksList = () => {
           <div style={styles.textContainer}>
             <h3 style={styles.bookTitle}>{item.title}</h3>
             <p style={styles.bookDescription}>Autor: {item.author || "Brak"}</p>
+            <p style={styles.bookDescription}>Cena: {"20"}</p>
           </div>
         </div>
       ))}
@@ -89,6 +90,7 @@ const styles: { [key: string]: CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   bookTitle: {
     fontSize: '18px',
@@ -101,6 +103,7 @@ const styles: { [key: string]: CSSProperties } = {
     color: '#777',
     marginTop: '4px',
     lineHeight: '20px',
+    textAlign: 'left',
   },
 };
 

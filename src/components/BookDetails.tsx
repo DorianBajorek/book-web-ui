@@ -9,7 +9,7 @@ const BookDetails: React.FC = () => {
   const { book, owner } = location.state;
   const { login, token, setIsDeleteOfferInProgress, isDeleteOfferInProgress } = useAuth();
 
-  const [selectedImage, setSelectedImage] = useState<string | null>(null); // stan do przechowywania wybranego zdjęcia
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const images = [
     { id: '1', image: { uri: book.cover_book.replace("/media/", "/media/cover_images/") } },
@@ -38,11 +38,11 @@ const BookDetails: React.FC = () => {
   };
 
   const handleImageClick = (uri: string) => {
-    setSelectedImage(uri); // Ustawiamy wybrane zdjęcie
+    setSelectedImage(uri);
   };
 
   const handleCloseModal = () => {
-    setSelectedImage(null); // Zamykamy modal
+    setSelectedImage(null);
   };
 
   return (
@@ -55,7 +55,7 @@ const BookDetails: React.FC = () => {
                 src={item.image.uri}
                 alt="Book Cover"
                 style={bookImageStyle}
-                onClick={() => handleImageClick(item.image.uri)} // Kliknięcie na zdjęcie
+                onClick={() => handleImageClick(item.image.uri)}
               />
             </div>
           ))}
@@ -75,6 +75,9 @@ const BookDetails: React.FC = () => {
           <p style={bookDetailStyle}>
             <span style={labelStyle}>ISBN: </span>{book.isbn}
           </p>
+          <p style={bookDetailStyle}>
+            <span style={labelStyle}>Cena: </span>20
+          </p>
         </div>
       </div>
 
@@ -90,12 +93,11 @@ const BookDetails: React.FC = () => {
         )}
       </div>
 
-      {/* Modal z powiększonym zdjęciem */}
       {selectedImage && (
         <div style={modalOverlayStyle} onClick={handleCloseModal}>
           <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
             <img src={selectedImage} alt="Enlarged" style={modalImageStyle} />
-            <span style={closeButtonStyle} onClick={handleCloseModal}>X</span> {/* Ikona zamknięcia */}
+            <span style={closeButtonStyle} onClick={handleCloseModal}>X</span>
           </div>
         </div>
       )}
@@ -104,11 +106,13 @@ const BookDetails: React.FC = () => {
 };
 
 const containerStyle: React.CSSProperties = {
+  fontFamily: 'Roboto, sans-serif',
   padding: '20px',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   backgroundColor: '#f5f5f5',
+  minHeight: "100vh"
 };
 
 const cardStyle: React.CSSProperties = {
@@ -172,6 +176,7 @@ const buttonStyle: React.CSSProperties = {
   cursor: 'pointer',
   width: '100%',
   textAlign: 'center',
+  border: "0px"
 };
 
 const deleteButtonStyle: React.CSSProperties = {
