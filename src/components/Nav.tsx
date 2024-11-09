@@ -10,17 +10,17 @@ const Nav: React.FC = () => {
         LOGO
       </div>
       <ul style={styles.navList}>
-        <li style={styles.navItem}><a href="/" style={styles.navLink}>Home</a></li>
-        <li style={styles.navItem}><a href="/offers" style={styles.navLink}>Ogłoszenia</a></li>
+        <li style={styles.navItem}><a href="/" style={styles.navLink}>Strona główna</a></li>
         {token ? (
           <>
+            <li style={styles.navItem}><a href="/offers" style={styles.navLink}>Ogłoszenia</a></li>
             <li style={styles.navItem}><a href="/profile" style={styles.navLink}>Profile</a></li>
-            <li style={styles.navItem}><a onClick={logout} href="/" style={styles.navLink}>Logout</a></li>
+            <li style={styles.navItem}><a onClick={logout} href="/" style={styles.navLink}>Wyloguj się</a></li>
           </>
         ) : (
           <>
-            <li style={styles.navItem}><a href="/login" style={styles.navLink}>Login</a></li>
-            <li style={styles.navItem}><a href="/register" style={styles.navLink}>Register</a></li>
+            <li style={styles.navItem}><a href="/login" style={styles.navLink}>Zaloguj się</a></li>
+            <li style={styles.navItem}><a href="/register" style={styles.navLink}>Zarejestruj się</a></li>
           </>
         )}
       </ul>

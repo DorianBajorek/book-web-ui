@@ -25,8 +25,7 @@ export const loginUser = async (username: string, password: string) => {
     console.log(response.data)
     return response.data;
   } catch (error) {
-    console.error('Invalid login to the service', error);
-    return null;
+    throw error;
   }
 };
 

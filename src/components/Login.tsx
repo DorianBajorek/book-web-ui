@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { loginUser } from '../BooksService';
 import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
+import ErrorBanner from './Banners/ErrorBanner';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showError, setShowError] = useState(false);
   const { updateToken, updateUserName, updateEmail } = useAuth();
   const navigate = useNavigate();
 
@@ -20,11 +22,14 @@ const Login: React.FC = () => {
         navigate('/');
       }
     } catch (error) {
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
     }
   };
 
   return (
     <div style={styles.pageContainer}>
+      {showError && <ErrorBanner message="Nieprawidłowa nazwa użytkownika lub hasła" />}
       <div style={styles.container}>
         <div style={styles.formGroup}>
           <label style={styles.label}>Nazwa użytkownika:</label>
