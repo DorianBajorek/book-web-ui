@@ -11,7 +11,7 @@ const Nav: React.FC = () => {
       </div>
       <ul style={styles.navList}>
         <li style={styles.navItem}><a href="/" style={styles.navLink}>Home</a></li>
-        <li style={styles.navItem}><a href="/about" style={styles.navLink}>About</a></li>
+        <li style={styles.navItem}><a href="/offers" style={styles.navLink}>Ogłoszenia</a></li>
         {token ? (
           <>
             <li style={styles.navItem}><a href="/profile" style={styles.navLink}>Profile</a></li>

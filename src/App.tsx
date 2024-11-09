@@ -8,6 +8,7 @@ import Register from './components/Register';
 import { AuthProvider } from './components/UserData';
 import Profile from './components/Profile';
 import BookDetails from './components/BookDetails';
+import SearchScreen from './components/SearchScreen';
 
 function App() {
   return (
@@ -17,16 +18,15 @@ function App() {
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />
-          {/* <Route path="/about" element={<About />} /> */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/book-details" element={<BookDetails />} />
+          <Route path="/offers" element={<SearchScreen />} />
         </Routes>
       </div>
     </Router>
     </AuthProvider>
   );
 }
-
 export default App;
