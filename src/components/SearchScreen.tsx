@@ -39,8 +39,8 @@ const SearchScreen = () => {
   }, [searchQuery, token]);
 
   const handleBookClick = (book: Book) => {
-    const owner = book.user;
-    navigate('/book-details', { state: { book, owner } });
+    const offerId = book.offer_id;
+    navigate(`/book-details/${offerId}`);
   };
 
   return (
@@ -140,8 +140,18 @@ const bookImageStyle: React.CSSProperties = {
 };
 
 const textContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+};
+  
+const bookDescriptionStyle: React.CSSProperties = {
+    fontSize: '14px',
+    color: '#666',
+    marginTop: '4px',
+    textAlign: 'left',
+    marginBottom: '-4px',
+    fontWeight: '700'
 };
 
 const bookTitleStyle: React.CSSProperties = {
@@ -149,12 +159,6 @@ const bookTitleStyle: React.CSSProperties = {
   fontWeight: '600',
   color: '#333',
   marginBottom: '4px',
-};
-
-const bookDescriptionStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: '#666',
-  marginTop: '4px',
 };
 
 const noResultsTextStyle: React.CSSProperties = {
