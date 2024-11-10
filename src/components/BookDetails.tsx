@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getOfferById } from '../BooksService';
+import { getOfferById, deleteOffer } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
+import LoadingSpinner from './LoadingSpinner';
 
 const BookDetails: React.FC = () => {
   const { offer_id } = useParams();
-  const { token } = useAuth();
+  const { token, login, setIsDeleteOfferInProgress } = useAuth();
+  const navigate = useNavigate();
 
   const [book, setBook] = useState<Book>();
   const [owner, setOwner] = useState('');
@@ -30,8 +32,20 @@ const BookDetails: React.FC = () => {
     }
   }, [offer_id, token]);
 
+  const handleDelete = async () => {
+    try {
+      setIsDeleteOfferInProgress(true);
+      await deleteOffer(token, offer_id);
+      setIsDeleteOfferInProgress(false);
+      navigate('/profile');
+    } catch (error) {
+      console.error("Failed to delete offer", error);
+      alert("Failed to delete the offer");
+    }
+  };
+
   if (!book) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner visible={true} />
   }
 
   const images = [
@@ -67,10 +81,12 @@ const BookDetails: React.FC = () => {
         <div style={detailsContainerStyle}>
           <p><b>Autor:</b> {book.author || 'Brak'}</p>
           <p><b>Użytkownik:</b> {owner}</p>
-          <p><b>Cena:</b> {book.price}</p>
+          <p><b>Cena:</b> {book.price},00 zł</p>
         </div>
+        {owner === login && (
+          <button onClick={handleDelete} style={deleteButtonStyle}>Usuń ofertę</button>
+        )}
       </div>
-
       {selectedImage && (
         <div style={modalOverlayStyle} onClick={handleCloseModal}>
           <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
@@ -81,6 +97,17 @@ const BookDetails: React.FC = () => {
       )}
     </div>
   );
+};
+
+const deleteButtonStyle: React.CSSProperties = {
+  backgroundColor: '#ff4d4f',
+  color: '#fff',
+  padding: '10px 20px',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontWeight: '600',
+  marginTop: '20px',
 };
 
 const containerStyle: React.CSSProperties = {

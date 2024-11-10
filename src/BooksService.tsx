@@ -29,10 +29,10 @@ export const loginUser = async (username: string, password: string) => {
   }
 };
 
-export const getUserOffers = async (token: string) => {
+export const getUserOffers = async (token: string, username: string) => {
   try {
     const response = await axios.get(
-      "http://0.0.0.0:8000/books/v1/get_user_offers/",
+      `http://0.0.0.0:8000/books/v1/get_user_offers/${username}/`,
       {
         headers: {
           'Authorization': `Token ${token}`,
@@ -42,10 +42,12 @@ export const getUserOffers = async (token: string) => {
     );
     return response.data;
   } catch (error) {
+    console.error("Error fetching user offers:", error);
   }
 };
 
-export const deleteOffer = async (token: string, offerId: string) => {
+export const deleteOffer = async (token: string, offerId?: string) => {
+  if(!offerId) return ;
   try {
     const response = await axios.delete(
       `http://0.0.0.0:8000/books/v1/delete_offer/${offerId}/`,

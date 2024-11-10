@@ -1,8 +1,11 @@
 import React from 'react';
 import '@fontsource/inter';
 import { useAuth } from './UserData';
+import { useNavigate } from 'react-router-dom';
+
 const Nav: React.FC = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, login } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <nav style={styles.nav}>
@@ -14,7 +17,9 @@ const Nav: React.FC = () => {
         {token ? (
           <>
             <li style={styles.navItem}><a href="/offers" style={styles.navLink}>Ogłoszenia</a></li>
-            <li style={styles.navItem}><a href="/profile" style={styles.navLink}>Profile</a></li>
+            <li style={styles.navItem}>
+              <a href={`/profile/${login}`} style={styles.navLink}>Profil</a>
+            </li>
             <li style={styles.navItem}><a onClick={logout} href="/" style={styles.navLink}>Wyloguj się</a></li>
           </>
         ) : (
