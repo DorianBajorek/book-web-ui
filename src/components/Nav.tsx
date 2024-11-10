@@ -10,7 +10,8 @@ const Nav: React.FC = () => {
   return (
     <nav style={styles.nav}>
       <div style={styles.logoWrapper}>
-        LOGO
+        <img src="/simpleLogo.png" alt="Logo" style={styles.logoImage} />
+       <p style={{color: "#169ee7"}}>Druga Książka</p>
       </div>
       <ul style={styles.navList}>
         <li style={styles.navItem}><a href="/" style={styles.navLink}>Strona główna</a></li>
@@ -66,9 +67,9 @@ const styles = {
     color: "#555"
   },
   logoImage: {
-    marginRight: '15px',
-    width: '35px',
-    height: '40px'
+    marginRight: '0px',
+    width: '80px',
+    height: '80px'
   }
 };
 
