@@ -1,19 +1,26 @@
-import React, { useState, CSSProperties } from 'react';
+import React, { useState, CSSProperties, useEffect } from 'react';
 import { useAuth } from './UserData';
 import BooksList from './BookList';
+import { useParams } from 'react-router-dom';
 
 const Profile = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { login, email } = useAuth();
+  const { userLogin } = useParams<{ userLogin: string }>();
+
+  useEffect(() => {
+    if (userLogin && userLogin !== login) {
+      console.log(`Załadowano dane dla innego użytkownika: ${userLogin}`);
+    }
+  }, [userLogin, login]);
 
   return (
     <div style={styles.profileContainer}>
       <div style={styles.profileCard}>
-        <img src="avatar.png" alt="User Avatar" style={styles.avatar} />
+      <img src="/avatar.png" alt="User Avatar" style={styles.avatar} />
 
         <div style={styles.infoRow}>
           <span style={styles.label}>Nazwa użytkownika:</span>
-          <span style={styles.infoValue}>{login}</span>
+          <span style={styles.infoValue}>{userLogin || login}</span>
         </div>
 
         <div style={styles.infoRow}>
@@ -22,7 +29,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <BooksList />
+      <BooksList username={userLogin || login} />
     </div>
   );
 };

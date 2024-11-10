@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect } from 'react';
 
 const styles: { [key: string]: CSSProperties } = {
   overlay: {
@@ -15,11 +15,11 @@ const styles: { [key: string]: CSSProperties } = {
   },
   spinner: {
     border: '8px solid #f3f3f3',
-    borderTop: '8px solid "#454647"',
+    borderTop: '8px solid #454647',
     borderRadius: '50%',
     width: '50px',
     height: '50px',
-    animation: 'spin 1s linear infinite',
+    animation: 'spin 1s linear infinite, colorChange 1.5s linear infinite', 
   },
 };
 
@@ -35,11 +35,22 @@ interface LoadingSpinnerProps {
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ visible }) => {
-  if (!visible) return null; // Jeśli nie ma widoczności, nie renderuj spinnera
+  useEffect(() => {
+    if (visible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [visible]);
+
+  if (!visible) return null;
 
   return (
     <>
-      <style>{keyframes}</style> {/* Animacja spinnera dodana do dokumentu */}
+      <style>{keyframes}</style>
       <div style={styles.overlay}>
         <div style={styles.spinner}></div>
       </div>

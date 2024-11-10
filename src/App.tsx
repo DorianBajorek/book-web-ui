@@ -13,20 +13,21 @@ import SearchScreen from './components/SearchScreen';
 function App() {
   return (
     <AuthProvider>
-    <Router>
-      <div className="App">
-        <Nav />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/book-details/:offer_id" element={<BookDetails />} />
-          <Route path="/offers" element={<SearchScreen />} />
-        </Routes>
-      </div>
-    </Router>
+      <Router>
+        <div className="App">
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile/:userLogin" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/book-details/:offer_id" element={<BookDetails />} />
+            <Route path="/offers" element={<SearchScreen />} />
+          </Routes>
+        </div>
+      </Router>
     </AuthProvider>
   );
 }
+
 export default App;

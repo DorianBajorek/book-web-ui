@@ -5,8 +5,12 @@ import { useAuth } from './UserData';
 import { Book } from './Constant';
 import LoadingSpinner from './LoadingSpinner';
 
-const BooksList = () => {
-  const { token, login } = useAuth();
+interface BooksListProps {
+  username: string;
+}
+
+const BooksList: React.FC<BooksListProps> = ({ username }) => {
+  const { token, isDeleteOfferInProgress } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -14,7 +18,7 @@ const BooksList = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const data = await getUserOffers(token);
+        const data = await getUserOffers(token, username);
         if (data) {
           setBooks(data);
         }
@@ -26,7 +30,7 @@ const BooksList = () => {
     };
 
     fetchBooks();
-  }, [token]);
+  }, [token, username, isDeleteOfferInProgress]);
 
   const handleBookClick = (offer_id: number) => {
     navigate(`/book-details/${offer_id.toString()}`);
@@ -52,7 +56,7 @@ const BooksList = () => {
           <div style={styles.textContainer}>
             <h3 style={styles.bookTitle}>{item.title}</h3>
             <p style={styles.bookDescription}>Autor: {item.author || "Brak"}</p>
-            <p style={styles.bookDescription}>Cena: {item.price}</p>
+            <p style={styles.bookDescription}>Cena: {item.price},00 zł</p>
           </div>
         </div>
       ))}
