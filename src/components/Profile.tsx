@@ -5,9 +5,6 @@ import BooksList from './BookList';
 const Profile = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { login, email } = useAuth();
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen);
-  };
 
   return (
     <div style={styles.profileContainer}>

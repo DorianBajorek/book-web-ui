@@ -68,6 +68,7 @@ const SearchScreen = () => {
                 <h3 style={bookTitleStyle}>{item.title}</h3>
                 <p style={bookDescriptionStyle}>Autor: {item.author ? item.author : 'Brak'}</p>
                 <p style={bookDescriptionStyle}>Użytkownik: {item.user}</p>
+                <p style={bookDescriptionStyle}>Cena: {item.price}</p>
               </div>
             </div>
           ))
