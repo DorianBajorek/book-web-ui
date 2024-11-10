@@ -52,7 +52,7 @@ const BooksList = () => {
           <div style={styles.textContainer}>
             <h3 style={styles.bookTitle}>{item.title}</h3>
             <p style={styles.bookDescription}>Autor: {item.author || "Brak"}</p>
-            <p style={styles.bookDescription}>Cena: {"20 PLN"}</p>
+            <p style={styles.bookDescription}>Cena: {item.price}</p>
           </div>
         </div>
       ))}

@@ -6,4 +6,5 @@ export interface Book {
     user?: string;
     frontImage?: string;
     backImage?: string;
+    price?: string;
   }

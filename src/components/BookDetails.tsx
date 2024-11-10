@@ -67,7 +67,7 @@ const BookDetails: React.FC = () => {
         <div style={detailsContainerStyle}>
           <p><b>Autor:</b> {book.author || 'Brak'}</p>
           <p><b>Użytkownik:</b> {owner}</p>
-          <p><b>Cena:</b> 20 PLN</p>
+          <p><b>Cena:</b> {book.price}</p>
         </div>
       </div>
 
