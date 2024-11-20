@@ -7,7 +7,7 @@ export const registerUser = async (email: string, username: string, password: st
         username: username,
         password: password
       };
-      const response = await axios.post("http://198.244.188.128:8000/auth/v1/register/", payload);
+      const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/register/", payload);
       return response.data
     } catch (error) {
       console.error('Registration failed', error);
@@ -21,7 +21,7 @@ export const loginUser = async (username: string, password: string) => {
       username: username,
       password: password
     };
-    const response = await axios.post("http://198.244.188.128:8000/auth/v1/login/", payload);
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/login/", payload);
     console.log(response.data)
     return response.data;
   } catch (error) {
@@ -32,7 +32,7 @@ export const loginUser = async (username: string, password: string) => {
 export const getUserOffers = async (token: string, username: string) => {
   try {
     const response = await axios.get(
-      `http://198.244.188.128:8000/books/v1/get_user_offers/${username}/`,
+      `https://drugaksiazka.pl/api/books/v1/get_user_offers/${username}/`,
       {
         headers: {
           'Authorization': `Token ${token}`,
@@ -50,7 +50,7 @@ export const deleteOffer = async (token: string, offerId?: string) => {
   if(!offerId) return ;
   try {
     const response = await axios.delete(
-      `http://198.244.188.128:8000/books/v1/delete_offer/${offerId}/`,
+      `https://drugaksiazka.pl/api/books/v1/delete_offer/${offerId}/`,
       {
         headers: {
           'Authorization': `Token ${token}`,
@@ -64,7 +64,7 @@ export const deleteOffer = async (token: string, offerId?: string) => {
 
 export const getOffersByQuery = async (token: string, searchQuery: string) => {
   try {
-    const url = `http://198.244.188.128:8000/books/v1/search_users_with_title/?searchQuery=${encodeURIComponent(searchQuery)}`;
+    const url = `https://drugaksiazka.pl/api/books/v1/search_users_with_title/?searchQuery=${encodeURIComponent(searchQuery)}`;
     const response = await axios.get(url, {
       headers: {
         Authorization: `Token ${token}`
@@ -79,7 +79,7 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
 
 export const getOfferById = async (token: string, offerId: string) => {
   try {
-    const url = `http://198.244.188.128:8000/books/v1/get_offer/${offerId}/`;
+    const url = `https://drugaksiazka.pl/api/books/v1/get_offer/${offerId}/`;
     console.log("ATAKUJE")
     const response = await axios.get(url, {
       headers: {
