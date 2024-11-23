@@ -1,16 +1,26 @@
 import React, { useState } from 'react';
-import { useAuth } from './UserData';
 import { registerUser } from '../BooksService';
+import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
+import ErrorBanner from './Banners/ErrorBanner';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const navigate = useNavigate();
+  const [showError, setShowError] = useState('');
   const { updateToken, updateUserName, updateEmail } = useAuth();
+  const navigate = useNavigate();
+
   const handleRegister = async () => {
+    setShowError('');
+    if (!username || !email || !password || !confirmPassword) {
+      setShowError('Wszystkie pola muszą być wypełnione.');
+      setTimeout(() => setShowError(''), 5000);
+      return;
+    }
+
     try {
       const data = await registerUser(email, username, password);
       if (data) {
@@ -20,11 +30,14 @@ const Register: React.FC = () => {
         navigate('/');
       }
     } catch (error) {
+      setShowError('Wystąpił błąd podczas rejestracji.');
+      setTimeout(() => setShowError(''), 5000);
     }
   };
 
   return (
     <div style={styles.pageContainer}>
+      {showError && <ErrorBanner message={showError} />}
       <div style={styles.container}>
         <div style={styles.formGroup}>
           <label style={styles.label}>Nazwa użytkownika:</label>
@@ -33,7 +46,7 @@ const Register: React.FC = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
-            placeholder="Username"
+            placeholder="Nazwa użytkownika"
           />
         </div>
 
@@ -55,12 +68,23 @@ const Register: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             style={styles.input}
-            placeholder="Password"
+            placeholder="Hasło"
+          />
+        </div>
+
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Powtórz hasło:</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            style={styles.input}
+            placeholder="Powtórz hasło"
           />
         </div>
 
         <button type="button" onClick={handleRegister} style={styles.button}>
-          Register
+          Zarejestruj się
         </button>
       </div>
     </div>
