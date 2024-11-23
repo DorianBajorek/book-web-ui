@@ -32,6 +32,10 @@ const BookDetails: React.FC = () => {
     }
   }, [offer_id, token]);
 
+  const handleNavigateToUserProfile = (username: string) => {
+    navigate(`/profile/${username}`);
+  };
+
   const handleDelete = async () => {
     try {
       setIsDeleteOfferInProgress(true);
@@ -44,14 +48,18 @@ const BookDetails: React.FC = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   if (!book) {
     return <LoadingSpinner visible={true} />
   }
 
   const images = [
-    { id: '1', image: { uri: book.cover_book.replace("/media/", "/media/cover_images/") } },
-    ...(book.frontImage ? [{ id: '2', image: { uri: book.frontImage } }] : []),
-    ...(book.backImage ? [{ id: '3', image: { uri: book.backImage } }] : []),
+    { id: '1', image: { uri: book.cover_book.replace("/media/", "/media/cover_images/").replace("http", "https") } },
+    ...(book.frontImage ? [{ id: '2', image: { uri: book.frontImage.replace("http", "https") } }] : []),
+    ...(book.backImage ? [{ id: '3', image: { uri: book.backImage.replace("http", "https") } }] : []),
   ];
 
   const handleImageClick = (uri: string) => {
@@ -61,10 +69,10 @@ const BookDetails: React.FC = () => {
   const handleCloseModal = () => {
     setSelectedImage(null);
   };
-
   return (
     <div style={containerStyle}>
       <div style={cardStyle}>
+        <button style={backButtonStyle} onClick={handleBack}>X</button>
         <h2 style={bookTitleStyle}>{book.title}</h2>
         <div style={imagesContainerStyle}>
           {images.map((image) => (
@@ -79,9 +87,16 @@ const BookDetails: React.FC = () => {
           ))}
         </div>
         <div style={detailsContainerStyle}>
-          <p><b>Autor:</b> {book.author || 'Brak'}</p>
-          <p><b>Użytkownik:</b> {owner}</p>
-          <p><b>Cena:</b> {book.price},00 zł</p>
+          <p style={authorStyle}><b>Autor:</b> {book.author || 'Brak'}</p>
+          <p style={userStyle}><b>Użytkownik: </b> 
+            <span 
+              style={{ color: '#169ee7', cursor: 'pointer' }} 
+              onClick={() => handleNavigateToUserProfile(owner)}
+            >
+              {owner}
+            </span>
+          </p>
+          <p style={priceStyle}><b>Cena:</b> {book.price},00 zł</p>
         </div>
         {owner === login && (
           <button onClick={handleDelete} style={deleteButtonStyle}>Usuń ofertę</button>
@@ -97,17 +112,32 @@ const BookDetails: React.FC = () => {
       )}
     </div>
   );
+}
+
+const backButtonStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '0px',
+  right: '10px',
+  fontSize: '24px',
+  fontWeight: '900',
+  color: '#333',
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '10px',
+  borderRadius: '50%',
 };
 
 const deleteButtonStyle: React.CSSProperties = {
   backgroundColor: '#ff4d4f',
   color: '#fff',
-  padding: '10px 20px',
+  padding: '12px 24px',
   border: 'none',
   borderRadius: '5px',
   cursor: 'pointer',
   fontWeight: '600',
   marginTop: '20px',
+  fontSize: '18px',
 };
 
 const containerStyle: React.CSSProperties = {
@@ -123,19 +153,20 @@ const containerStyle: React.CSSProperties = {
 const cardStyle: React.CSSProperties = {
   backgroundColor: '#fff',
   borderRadius: '10px',
-  padding: '20px',
+  padding: '40px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   marginBottom: '20px',
   width: '100%',
   maxWidth: '600px',
   textAlign: 'center',
+  position: 'relative',
 };
 
 const bookTitleStyle: React.CSSProperties = {
-  fontSize: '24px',
+  fontSize: '28px', // Zwiększenie rozmiaru tytułu książki
   fontWeight: '700',
   marginTop: '10px',
-  marginBottom: '10px',
+  marginBottom: '20px',
   color: '#333',
 };
 
@@ -143,14 +174,35 @@ const detailsContainerStyle: React.CSSProperties = {
   color: "#666",
   textAlign: 'left',
   width: '100%',
-  marginTop: '10px',
-  fontWeight: '500'
+  marginTop: '20px', // Zwiększenie odstępu od zdjęć
+  fontWeight: '600',
+};
+
+const authorStyle: React.CSSProperties = {
+  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontWeight: 'bold', 
+  color: '#444',
+  marginBottom: '10px',
+};
+
+const userStyle: React.CSSProperties = {
+  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontWeight: 'bold', 
+  color: '#444',
+  marginBottom: '10px',
+};
+
+const priceStyle: React.CSSProperties = {
+  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontWeight: 'bold', 
+  color: '#444',
+  marginBottom: '10px',
 };
 
 const bookImageStyle: React.CSSProperties = {
   width: '100%',
-  height: '200px', // Możesz ustawić stałą wysokość, aby zapewnić równość rozmiarów
-  objectFit: 'cover', // Zapewnia, że zdjęcie wypełnia kontener, zachowując proporcje
+  height: '200px',
+  objectFit: 'cover',
   display: 'block',
   borderRadius: '10px',
   cursor: 'pointer',

@@ -60,7 +60,7 @@ const SearchScreen = () => {
           results.map((item: Book, index) => (
             <div key={index} style={resultContainerStyle} onClick={() => handleBookClick(item)}>
               <img
-                src={item.cover_book.replace('/media/', '/media/cover_images/')}
+                src={item.cover_book.replace('/media/', '/media/cover_images/').replace("http", "https")}
                 alt={`${item.title} cover`}
                 style={bookImageStyle}
               />
