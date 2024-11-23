@@ -22,7 +22,6 @@ export const loginUser = async (username: string, password: string) => {
       password: password
     };
     const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/login/", payload);
-    console.log(response.data)
     return response.data;
   } catch (error) {
     throw error;
@@ -80,7 +79,6 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
 export const getOfferById = async (token: string, offerId: string) => {
   try {
     const url = `https://drugaksiazka.pl/api/books/v1/get_offer/${offerId}/`;
-    console.log("ATAKUJE")
     const response = await axios.get(url, {
       headers: {
         Authorization: `Token ${token}`,

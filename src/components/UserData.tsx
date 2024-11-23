@@ -29,10 +29,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const savedToken = await AsyncStorage.getItem('token');
     const savedLogin = await AsyncStorage.getItem('login');
     const savedPassword = await AsyncStorage.getItem('password');
+    const savedEmail = await AsyncStorage.getItem('email');
 
     if (savedToken) setToken(savedToken);
     if (savedLogin) setLogin(savedLogin);
     if (savedPassword) setPassword(savedPassword);
+    if (savedEmail) setEmail(savedEmail);
   };
 
   useEffect(() => {

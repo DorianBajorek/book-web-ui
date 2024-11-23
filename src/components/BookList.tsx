@@ -49,7 +49,7 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
           style={styles.bookContainer}
         >
           <img 
-            src={item.cover_book.replace("/media/", "/media/cover_images/")}
+            src={item.cover_book.replace("/media/", "/media/cover_images/").replace("http", "https")}
             alt={`${item.title} cover`}
             style={styles.bookImage}
           />

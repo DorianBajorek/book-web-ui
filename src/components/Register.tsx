@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from './UserData';
 import { registerUser } from '../BooksService';
+import { useNavigate } from 'react-router-dom';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
   const { updateToken, updateUserName, updateEmail } = useAuth();
   const handleRegister = async () => {
     try {
@@ -15,6 +17,7 @@ const Register: React.FC = () => {
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);
+        navigate('/');
       }
     } catch (error) {
     }

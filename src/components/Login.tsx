@@ -14,8 +14,8 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     try {
       const data = await loginUser(username, password);
+      console.log(data)
       if (data) {
-        console.log("TOKEN: " + data.token);
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);

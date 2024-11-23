@@ -7,12 +7,6 @@ const Profile = () => {
   const { login, email } = useAuth();
   const { userLogin } = useParams<{ userLogin: string }>();
 
-  useEffect(() => {
-    if (userLogin && userLogin !== login) {
-      console.log(`Załadowano dane dla innego użytkownika: ${userLogin}`);
-    }
-  }, [userLogin, login]);
-
   return (
     <div style={styles.profileContainer}>
       <div style={styles.profileCard}>
