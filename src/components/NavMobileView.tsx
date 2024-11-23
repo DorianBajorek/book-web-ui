@@ -103,6 +103,7 @@ const styles = {
     boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
     listStyle: 'none',
     margin: 0,
+    zIndex: 1000,
   },
   navItem: {
     marginBottom: '1rem',

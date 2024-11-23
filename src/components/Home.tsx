@@ -3,6 +3,7 @@ import BookSlider from './BookSlider';
 import { useAuth } from './UserData';
 import LoadingSpinner from './LoadingSpinner';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 const books = [
   { id: '1', image: 'atomowe-nawyki.jpg' },
@@ -28,6 +29,10 @@ const HomeView: React.FC = () => {
 
   return (
     <div style={styles.container}>
+      <Helmet>
+        <title>Drugaksiazka.pl - Sprzedaj książki online</title>
+        <meta name="description" content="Sprzedaj używane książki szybko i łatwo dzięki naszej aplikacji do skanowania kodów kreskowych." />
+      </Helmet>
       <header style={styles.header}>
         <h1 style={styles.appTitle}>Druga Książka</h1>
         <p style={styles.description}>

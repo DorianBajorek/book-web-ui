@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import './App.css';
 import Nav from './components/Nav';
 import Home from './components/Home';
@@ -24,7 +25,13 @@ function App() {
       <Router>
         <div className="App">
           {windowWidth < 600 ? <NavMobileView /> : <Nav />}
-          
+          <Helmet>
+            <title>Drugaksiazka.pl - Sprzedaj używane książki online</title>
+            <meta name="description" content="Sprzedaj używane książki online za pomocą aplikacji do skanowania kodów kreskowych. Wystawiaj książki na sprzedaż w kilka sekund!" />
+            <meta name="keywords" content="sprzedaż książek online, używane książki, książki na sprzedaż, aplikacja do sprzedaży książek, sprzedaj książki, skanowanie kodów kreskowych książek, druga książka,
+            tania ksiażka, księgania online." />
+          </Helmet>
+
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/profile/:userLogin" element={<Profile />} />

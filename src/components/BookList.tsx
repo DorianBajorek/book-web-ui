@@ -75,7 +75,7 @@ const styles: { [key: string]: CSSProperties } = {
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: '#ffffff',
-    padding: '15px',
+    padding: 15,
     marginBottom: '15px',
     borderRadius: '15px',
     boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
@@ -88,7 +88,7 @@ const styles: { [key: string]: CSSProperties } = {
     height: '120px',
     borderRadius: '10px',
     marginRight: '15px',
-    border: '1px solid #ddd',
+    border: '1.5px solid #ddd',
   },
   textContainer: {
     display: 'flex',
