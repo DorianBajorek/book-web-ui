@@ -45,6 +45,7 @@ const styles: {
     padding: '30px',
     backgroundColor: '#f7f9fc',
     minHeight: '100vh',
+    boxSizing: 'border-box',
   },
   profileCard: {
     display: 'flex',
@@ -55,8 +56,10 @@ const styles: {
     borderRadius: '15px',
     boxShadow: '0 6px 10px rgba(0, 0, 0, 0.1)',
     maxWidth: '400px',
-    width: '100%',
+    width: '80%',
     marginBottom: '20px',
+    maxHeight: '80vh',
+    overflowY: 'auto',
   },
   avatar: {
     width: '120px',

@@ -4,6 +4,7 @@ import { getOfferById, deleteOffer } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
 import LoadingSpinner from './LoadingSpinner';
+import { Helmet } from 'react-helmet';
 
 const BookDetails: React.FC = () => {
   const { offer_id } = useParams();
@@ -71,6 +72,10 @@ const BookDetails: React.FC = () => {
   };
   return (
     <div style={containerStyle}>
+      <Helmet>
+        <title>{book.title} - Drugaksiazka.pl</title>
+        <meta name="description" content={book.author + ", " + book.title} />
+      </Helmet>
       <div style={cardStyle}>
         <button style={backButtonStyle} onClick={handleBack}>X</button>
         <h2 style={bookTitleStyle}>{book.title}</h2>
