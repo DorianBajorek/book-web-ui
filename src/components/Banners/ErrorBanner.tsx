@@ -47,6 +47,7 @@ const iconContainerStyle: React.CSSProperties = {
 
 const iconStyle: React.CSSProperties = {
   fontSize: '24px',
+  marginTop: '-7px'
 };
 
 const textContainerStyle: React.CSSProperties = {
