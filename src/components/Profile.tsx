@@ -2,10 +2,27 @@ import React, { useState, CSSProperties, useEffect } from 'react';
 import { useAuth } from './UserData';
 import BooksList from './BookList';
 import { useParams } from 'react-router-dom';
+import { getUserData } from '../BooksService';
 
 const Profile = () => {
-  const { login, email, phoneNumber } = useAuth();
-  const { userLogin } = useParams<{ userLogin: string }>();
+  const [email, setEmail] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const { userLogin, } = useParams<{ userLogin: string }>();
+  const { token, login } = useAuth()
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if(token && userLogin) {
+        const data = await getUserData(token, userLogin);
+        if (data) {
+          setEmail(data.email || '');
+          setPhoneNumber(data.phoneNumber || '');
+        }
+      }
+    };
+
+    fetchData();
+  }, [token]);
 
   return (
     <div style={styles.profileContainer}>
@@ -14,7 +31,7 @@ const Profile = () => {
 
         <div style={styles.infoRow}>
           <span style={styles.label}>Nazwa użytkownika:</span>
-          <span style={styles.infoValue}>{userLogin || login}</span>
+          <span style={styles.infoValue}>{userLogin}</span>
         </div>
 
         <div style={styles.infoRow}>
