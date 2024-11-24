@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
-  const { updateToken, updateUserName, updateEmail } = useAuth();
+  const { updateToken, updateUserName, updateEmail, updatePhoneNumber } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -19,6 +19,7 @@ const Login: React.FC = () => {
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);
+        updatePhoneNumber(data?.phoneNumber);
         navigate('/');
       }
     } catch (error) {

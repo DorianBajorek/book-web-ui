@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { registerUser } from '../BooksService';
 import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,12 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [showError, setShowError] = useState('');
-  const { updateToken, updateUserName, updateEmail } = useAuth();
+  const [showPopover, setShowPopover] = useState(false);
+  const { updateToken, updateUserName, updateEmail, updatePhoneNumber } = useAuth();
   const navigate = useNavigate();
+  const popoverRef = useRef<HTMLDivElement>(null);
 
   const handleRegister = async () => {
     setShowError('');
@@ -22,11 +25,12 @@ const Register: React.FC = () => {
     }
 
     try {
-      const data = await registerUser(email, username, password);
+      const data = await registerUser(email, username, password, phoneNumber);
       if (data) {
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);
+        updatePhoneNumber(data?.phoneNumber)
         navigate('/');
       }
     } catch (error) {
@@ -34,6 +38,21 @@ const Register: React.FC = () => {
       setTimeout(() => setShowError(''), 5000);
     }
   };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+      setShowPopover(false);
+    }
+  };
+
+  useEffect(() => {
+    if (showPopover) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showPopover]);
 
   return (
     <div style={styles.pageContainer}>
@@ -83,6 +102,30 @@ const Register: React.FC = () => {
           />
         </div>
 
+        <div style={styles.formGroup}>
+          <label style={styles.label}>
+            Numer telefonu (opcjonalne):{' '}
+            <span
+              style={styles.infoIcon}
+              onClick={() => setShowPopover((prev) => !prev)}
+            >
+              ℹ️
+            </span>
+          </label>
+          <input
+            type="text"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            style={styles.input}
+            placeholder="Numer telefonu"
+          />
+          {showPopover && (
+            <div ref={popoverRef} style={styles.popover}>
+              Podaj numer telefonu, aby klienci mogli się z Tobą skontaktować – zwiększa to szanse na sprzedaż i ułatwia nawiązanie relacji.
+            </div>
+          )}
+        </div>
+
         <button type="button" onClick={handleRegister} style={styles.button}>
           Zarejestruj się
         </button>
@@ -96,7 +139,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
-    minHeight: '100vh',
+    minHeight: '90vh',
     backgroundColor: '#f4f5fb',
   },
   container: {
@@ -113,15 +156,18 @@ const styles = {
     display: 'flex',
     flexDirection: 'column' as const,
     marginBottom: '15px',
+    position: 'relative' as const,
   },
   label: {
-    fontSize: '16px',
+    fontSize: '18px',
     color: '#333',
     marginBottom: '5px',
+    display: 'flex',
+    alignItems: 'center' as const,
   },
   input: {
     padding: '12px 15px',
-    fontSize: '16px',
+    fontSize: '18px',
     borderRadius: '10px',
     border: '1px solid #e0e0e0',
     outline: 'none',
@@ -131,7 +177,7 @@ const styles = {
     marginTop: '20px',
     padding: '12px 0',
     borderRadius: '25px',
-    fontSize: '16px',
+    fontSize: '18px',
     fontWeight: 'bold' as const,
     color: '#fff',
     backgroundColor: '#4682b4',
@@ -139,6 +185,24 @@ const styles = {
     cursor: 'pointer' as const,
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
     transition: 'background-color 0.3s',
+  },
+  infoIcon: {
+    fontSize: '18px',
+    color: '#4682b4',
+    cursor: 'pointer',
+    marginLeft: '5px',
+  },
+  popover: {
+    position: 'absolute' as const,
+    top: '40px',
+    left: '0',
+    backgroundColor: '#fff',
+    padding: '10px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    fontSize: '14px',
+    color: '#333',
+    zIndex: 10,
   },
 };
 

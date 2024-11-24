@@ -10,6 +10,8 @@ const AuthContext = createContext({
   updatePassword: (password: string) => {},
   email: '',
   updateEmail: (email: string) => {},
+  phoneNumber: '',
+  updatePhoneNumber: (phoneNumber: string) => {},
   logout: () => {},
   isCreateOfferInProgress: false,
   setIsCreateOfferInProgress: (inProgress: boolean) => {},
@@ -21,6 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string>('');
   const [login, setLogin] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [phoneNumber, setPhoneNumber ] = useState<string>('');
   const [isCreateOfferInProgress, setIsCreateOfferInProgress] = useState(false);
   const [isDeleteOfferInProgress, setIsDeleteOfferInProgress] = useState(false);
   const [password, setPassword] = useState<string>('');
@@ -30,11 +33,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const savedLogin = await AsyncStorage.getItem('login');
     const savedPassword = await AsyncStorage.getItem('password');
     const savedEmail = await AsyncStorage.getItem('email');
+    const savedPhoneNumber = await AsyncStorage.getItem('phoneNumber');
 
     if (savedToken) setToken(savedToken);
     if (savedLogin) setLogin(savedLogin);
     if (savedPassword) setPassword(savedPassword);
     if (savedEmail) setEmail(savedEmail);
+    if (savedPhoneNumber) setPhoneNumber(savedPhoneNumber);
   };
 
   useEffect(() => {
@@ -54,6 +59,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateEmail = async (newEmail: string) => {
     setEmail(newEmail);
     await AsyncStorage.setItem('email', newEmail);
+  };
+
+  const updatePhoneNumber = async (newPhoneNumber: string) => {
+    setPhoneNumber(newPhoneNumber);
+    await AsyncStorage.setItem('phoneNumber', newPhoneNumber);
   };
 
   const updatePassword = async (newPassword: string) => {
@@ -79,6 +89,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updatePassword,
         email,
         updateEmail,
+        phoneNumber,
+        updatePhoneNumber,
         logout,
         isCreateOfferInProgress,
         setIsCreateOfferInProgress,

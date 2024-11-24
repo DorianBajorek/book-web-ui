@@ -4,7 +4,7 @@ import BooksList from './BookList';
 import { useParams } from 'react-router-dom';
 
 const Profile = () => {
-  const { login, email } = useAuth();
+  const { login, email, phoneNumber } = useAuth();
   const { userLogin } = useParams<{ userLogin: string }>();
 
   return (
@@ -21,6 +21,12 @@ const Profile = () => {
           <span style={styles.label}>Email:</span>
           <span style={styles.infoValue}>{email || "d1@op.pl"}</span>
         </div>
+        {phoneNumber !== "undefined" ? (
+          <div style={styles.infoRow}>
+            <span style={styles.label}>Numer telefonu:</span>
+            <span style={styles.infoValue}>{phoneNumber}</span>
+          </div>
+        ) : null}
       </div>
 
       <BooksList username={userLogin || login} />
