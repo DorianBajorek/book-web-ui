@@ -34,7 +34,7 @@ const HomeView: React.FC = () => {
         <meta name="description" content="Sprzedaj używane książki szybko i łatwo dzięki naszej aplikacji do skanowania kodów kreskowych." />
       </Helmet>
       <header style={styles.header}>
-        <h1 style={styles.appTitle}>Trzecia Książka</h1>
+        <h1 style={styles.appTitle}>Druga Książka</h1>
         <p style={styles.description}>
           Druga Książka to platforma, gdzie możesz wymieniać książki i dawać im drugie życie. Dołącz do naszej społeczności, odkrywaj nowe tytuły lub dziel się swoją kolekcją z innymi!
         </p>
