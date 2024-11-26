@@ -28,7 +28,7 @@ const HomeView: React.FC = () => {
   }
 
   const handleDownload = () => {
-    const url = 'https://www.drugaksiazka.pl/jobs.png';
+    const url = 'https://www.drugaksiazka.pl/drugaksiazka.apk';
     const link = document.createElement('a');
     link.href = url;
     link.download = 'jobs.png';
