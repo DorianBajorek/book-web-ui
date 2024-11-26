@@ -27,6 +27,16 @@ const HomeView: React.FC = () => {
     navigate("/register")
   }
 
+  const handleDownload = () => {
+    const url = 'https://www.drugaksiazka.pl/jobs.png';
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'jobs.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div style={styles.container}>
       <Helmet>
@@ -60,7 +70,15 @@ const HomeView: React.FC = () => {
           W Drugiej Książce możesz wymieniać książki z innymi. Połącz się z innymi użytkownikami, dziel się swoimi opiniami, odkrywaj nowe perspektywy i wzbogacaj swoje doświadczenia czytelnicze!
         </p>
       </div>
-
+      <div style={styles.downloadAppContainer}>
+        <h2 style={styles.downloadAppTitle}>Pobierz naszą aplikację</h2>
+        <p style={styles.downloadAppDescription}>
+          Chcesz mieć dostęp do naszej platformy zawsze przy sobie? Pobierz naszą aplikację, aby łatwo wymieniać książki i korzystać z wielu innych funkcji na swoim telefonie.
+        </p>
+        <a onClick={handleDownload}>
+          <button style={styles.button}>Pobierz</button>
+        </a>
+      </div>
       <div style={styles.howItWorksContainer}>
         <h2 style={styles.howItWorksTitle}>Jak to działa?</h2>
         <div style={styles.howItWorksStepsContainer}>
@@ -91,6 +109,27 @@ const styles = {
       fontSize: '32px',
       fontWeight: 800 as const,
       color: '#2e86c1',
+    },
+    downloadAppContainer: {
+      textAlign: 'center' as const,
+      padding: '20px',
+      backgroundColor: '#f5f8fa',
+      borderRadius: '15px',
+      margin: '0 auto 30px',
+      maxWidth: '1200px',
+    },
+    downloadAppTitle: {
+      fontSize: '24px',
+      fontWeight: '700',
+      color: '#2e86c1',
+      marginBottom: '10px',
+    },
+    downloadAppDescription: {
+      fontSize: '18px',
+      color: '#444',
+      lineHeight: '1.6',
+      maxWidth: '800px',
+      margin: '0 auto 20px',
     },
     description: {
       fontSize: '20px',
