@@ -11,8 +11,7 @@ export const registerUser = async (email: string, username: string, password: st
       const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/register/", payload);
       return response.data
     } catch (error) {
-      console.error('Registration failed', error);
-      return null;
+      throw error;
     }
   };
   
@@ -103,7 +102,6 @@ export const getOfferById = async (token: string, offerId: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error fetching offer details', error);
-    return null;
+    throw error;
   }
 };
