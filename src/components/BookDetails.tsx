@@ -14,6 +14,7 @@ const BookDetails: React.FC = () => {
   const [book, setBook] = useState<Book>();
   const [owner, setOwner] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (offer_id) {
@@ -25,7 +26,7 @@ const BookDetails: React.FC = () => {
             setOwner(data.username);
           }
         } catch (error) {
-          console.error("Failed to fetch book details", error);
+          setError(true);
         }
       };
 
@@ -42,7 +43,7 @@ const BookDetails: React.FC = () => {
       setIsDeleteOfferInProgress(true);
       await deleteOffer(token, offer_id);
       setIsDeleteOfferInProgress(false);
-      navigate('/profile');
+      navigate('/profile/' + login);
     } catch (error) {
       console.error("Failed to delete offer", error);
       alert("Failed to delete the offer");
@@ -52,6 +53,14 @@ const BookDetails: React.FC = () => {
   const handleBack = () => {
     navigate(-1);
   };
+
+  if (error) {
+    return (
+      <div style={errorContainerStyle}>
+        <h2 style={errorMessageStyle}>Nie znaleziono książki</h2>
+      </div>
+    );
+  }
 
   if (!book) {
     return <LoadingSpinner visible={true} />
@@ -168,7 +177,7 @@ const cardStyle: React.CSSProperties = {
 };
 
 const bookTitleStyle: React.CSSProperties = {
-  fontSize: '28px', // Zwiększenie rozmiaru tytułu książki
+  fontSize: '28px',
   fontWeight: '700',
   marginTop: '10px',
   marginBottom: '20px',
@@ -179,26 +188,26 @@ const detailsContainerStyle: React.CSSProperties = {
   color: "#666",
   textAlign: 'left',
   width: '100%',
-  marginTop: '20px', // Zwiększenie odstępu od zdjęć
+  marginTop: '20px',
   fontWeight: '600',
 };
 
 const authorStyle: React.CSSProperties = {
-  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontSize: '18px',
   fontWeight: 'bold', 
   color: '#444',
   marginBottom: '10px',
 };
 
 const userStyle: React.CSSProperties = {
-  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontSize: '18px',
   fontWeight: 'bold', 
   color: '#444',
   marginBottom: '10px',
 };
 
 const priceStyle: React.CSSProperties = {
-  fontSize: '18px', // Zwiększenie rozmiaru czcionki
+  fontSize: '18px',
   fontWeight: 'bold', 
   color: '#444',
   marginBottom: '10px',
@@ -270,5 +279,22 @@ const closeButtonStyle: React.CSSProperties = {
   padding: '15px',
   borderRadius: '50%',
 };
+
+const errorContainerStyle: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  backgroundColor: '#f5f5f5',
+  color: '#444',
+  fontFamily: 'Roboto, sans-serif',
+};
+
+const errorMessageStyle: React.CSSProperties = {
+  fontSize: '24px',
+  fontWeight: '700',
+  color: '#333',
+};
+
 
 export default BookDetails;

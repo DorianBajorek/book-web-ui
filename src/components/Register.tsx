@@ -34,7 +34,7 @@ const Register: React.FC = () => {
         navigate('/');
       }
     } catch (error) {
-      setShowError('Wystąpił błąd podczas rejestracji.');
+      setShowError('Użytkownik o takich danych już istnieje.');
       setTimeout(() => setShowError(''), 5000);
     }
   };
@@ -59,6 +59,16 @@ const Register: React.FC = () => {
       {showError && <ErrorBanner message={showError} />}
       <div style={styles.container}>
         <div style={styles.formGroup}>
+          <label style={styles.label}>E-mail:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={styles.input}
+            placeholder="E-mail"
+          />
+        </div>
+        <div style={styles.formGroup}>
           <label style={styles.label}>Nazwa użytkownika:</label>
           <input
             type="text"
@@ -66,17 +76,6 @@ const Register: React.FC = () => {
             onChange={(e) => setUsername(e.target.value)}
             style={styles.input}
             placeholder="Nazwa użytkownika"
-          />
-        </div>
-
-        <div style={styles.formGroup}>
-          <label style={styles.label}>E-mail:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            placeholder="Email"
           />
         </div>
 
@@ -121,7 +120,7 @@ const Register: React.FC = () => {
           />
           {showPopover && (
             <div ref={popoverRef} style={styles.popover}>
-              Podaj numer telefonu, aby klienci mogli się z Tobą skontaktować – zwiększa to szanse na sprzedaż i ułatwia nawiązanie relacji.
+              Podaj numer telefonu, aby klienci mogli się z Tobą skontaktować – zwiększa to szanse na sprzedaż i ułatwia nawiązanie relacji. Numer telefonu będzie dostępny dla wszystkich klientów Druga Książka.
             </div>
           )}
         </div>
@@ -195,12 +194,13 @@ const styles = {
   popover: {
     position: 'absolute' as const,
     top: '40px',
-    left: '0',
+    right: '-100px',
+    left: '200px',
     backgroundColor: '#fff',
     padding: '10px',
     borderRadius: '10px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    fontSize: '14px',
+    fontSize: '16px',
     color: '#333',
     zIndex: 10,
   },
