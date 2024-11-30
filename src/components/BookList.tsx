@@ -51,11 +51,13 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
             onClick={() => handleBookClick(item.offer_id)} 
             style={styles.bookContainer}
           >
-            <img 
-              src={item.cover_book.replace("/media/", "/media/cover_images/").replace("http", "https")}
+            {item.frontImage && (
+              <img 
+              src={item.frontImage.replace("http", "https")}
               alt={`${item.title} cover`}
               style={styles.bookImage}
             />
+            )}
             <div style={styles.textContainer}>
               <h3 style={styles.bookTitle}>{item.title}</h3>
               <p style={styles.bookDescription}>Autor: {item.author || "Brak"}</p>

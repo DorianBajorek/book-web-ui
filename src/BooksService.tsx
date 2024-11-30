@@ -28,6 +28,18 @@ export const loginUser = async (username: string, password: string) => {
   }
 };
 
+export const verifyEmail = async (token: string) => {
+  try {
+    const payload = {
+      token: token
+    };
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/verify_email/", payload);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getUserOffers = async (token: string, username: string) => {
   try {
     const response = await axios.get(
@@ -88,6 +100,17 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
     return response.data;
   } catch (error) {
     console.error('Search failed', error);
+    return null;
+  }
+}
+
+export const getLastAddedOffers = async (token: string) => {
+  try {
+    const url = `https://drugaksiazka.pl/api/books/v1/get_last_added_offers`;
+    const response = await axios.get(url);
+    console.log(response)
+    return response.data;
+  } catch (error) {
     return null;
   }
 }

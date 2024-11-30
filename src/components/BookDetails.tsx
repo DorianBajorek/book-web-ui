@@ -5,6 +5,7 @@ import { useAuth } from './UserData';
 import { Book } from './Constant';
 import LoadingSpinner from './LoadingSpinner';
 import { Helmet } from 'react-helmet';
+import CloseButton from './CloseButton';
 
 const BookDetails: React.FC = () => {
   const { offer_id } = useParams();
@@ -15,6 +16,20 @@ const BookDetails: React.FC = () => {
   const [owner, setOwner] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (offer_id) {
@@ -63,11 +78,10 @@ const BookDetails: React.FC = () => {
   }
 
   if (!book) {
-    return <LoadingSpinner visible={true} />
+    return <LoadingSpinner visible={true} />;
   }
 
   const images = [
-    { id: '1', image: { uri: book.cover_book.replace("/media/", "/media/cover_images/").replace("http", "https") } },
     ...(book.frontImage ? [{ id: '2', image: { uri: book.frontImage.replace("http", "https") } }] : []),
     ...(book.backImage ? [{ id: '3', image: { uri: book.backImage.replace("http", "https") } }] : []),
   ];
@@ -79,6 +93,7 @@ const BookDetails: React.FC = () => {
   const handleCloseModal = () => {
     setSelectedImage(null);
   };
+
   return (
     <div style={containerStyle}>
       <Helmet>
@@ -86,15 +101,15 @@ const BookDetails: React.FC = () => {
         <meta name="description" content={book.author + ", " + book.title} />
       </Helmet>
       <div style={cardStyle}>
-        <button style={backButtonStyle} onClick={handleBack}>X</button>
+        <CloseButton onPress={handleBack}/>
         <h2 style={bookTitleStyle}>{book.title}</h2>
-        <div style={imagesContainerStyle}>
+        <div style={isMobile ? mobileImagesContainerStyle : imagesContainerStyle}>
           {images.map((image) => (
-            <div key={image.id} style={bookContainerStyle}>
+            <div key={image.id} style={isMobile ? mobileBookContainerStyle : bookContainerStyle}>
               <img
                 src={image.image.uri}
                 alt={`Book image ${image.id}`}
-                style={bookImageStyle}
+                style={isMobile ? mobileBookImageStyle : bookImageStyle}
                 onClick={() => handleImageClick(image.image.uri)}
               />
             </div>
@@ -102,9 +117,9 @@ const BookDetails: React.FC = () => {
         </div>
         <div style={detailsContainerStyle}>
           <p style={authorStyle}><b>Autor:</b> {book.author || 'Brak'}</p>
-          <p style={userStyle}><b>Użytkownik: </b> 
-            <span 
-              style={{ color: '#169ee7', cursor: 'pointer' }} 
+          <p style={userStyle}><b>Użytkownik: </b>
+            <span
+              style={{ color: '#169ee7', cursor: 'pointer' }}
               onClick={() => handleNavigateToUserProfile(owner)}
             >
               {owner}
@@ -120,26 +135,31 @@ const BookDetails: React.FC = () => {
         <div style={modalOverlayStyle} onClick={handleCloseModal}>
           <div style={modalContentStyle} onClick={(e) => e.stopPropagation()}>
             <img src={selectedImage} alt="Enlarged" style={modalImageStyle} />
-            <span style={closeButtonStyle} onClick={handleCloseModal}>X</span>
+            <CloseButton onPress={handleCloseModal} />
           </div>
         </div>
       )}
     </div>
   );
-}
+};
 
-const backButtonStyle: React.CSSProperties = {
-  position: 'absolute',
-  top: '0px',
-  right: '10px',
-  fontSize: '24px',
-  fontWeight: '900',
-  color: '#333',
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  padding: '10px',
-  borderRadius: '50%',
+const mobileImagesContainerStyle: React.CSSProperties = {
+  display: 'block',
+  marginBottom: '20px',
+};
+
+const mobileBookContainerStyle: React.CSSProperties = {
+  marginBottom: '10px',
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'center',
+};
+
+const mobileBookImageStyle: React.CSSProperties = {
+  width: '50%',
+  height: 'auto',
+  objectFit: 'cover',
+  borderRadius: '10px',
 };
 
 const deleteButtonStyle: React.CSSProperties = {
@@ -170,7 +190,7 @@ const cardStyle: React.CSSProperties = {
   padding: '40px',
   boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
   marginBottom: '20px',
-  width: '100%',
+  width: '90%',
   maxWidth: '600px',
   textAlign: 'center',
   position: 'relative',
@@ -194,28 +214,28 @@ const detailsContainerStyle: React.CSSProperties = {
 
 const authorStyle: React.CSSProperties = {
   fontSize: '18px',
-  fontWeight: 'bold', 
+  fontWeight: 'bold',
   color: '#444',
   marginBottom: '10px',
 };
 
 const userStyle: React.CSSProperties = {
   fontSize: '18px',
-  fontWeight: 'bold', 
+  fontWeight: 'bold',
   color: '#444',
   marginBottom: '10px',
 };
 
 const priceStyle: React.CSSProperties = {
   fontSize: '18px',
-  fontWeight: 'bold', 
+  fontWeight: 'bold',
   color: '#444',
   marginBottom: '10px',
 };
 
 const bookImageStyle: React.CSSProperties = {
   width: '100%',
-  height: '200px',
+  height: '250px',
   objectFit: 'cover',
   display: 'block',
   borderRadius: '10px',
@@ -225,9 +245,9 @@ const bookImageStyle: React.CSSProperties = {
 
 const imagesContainerStyle: React.CSSProperties = {
   display: 'flex',
-  justifyContent: 'space-between',
+  justifyContent: 'center',
   marginBottom: '20px',
-  gap: '10px'
+  gap: '30px',
 };
 
 const bookContainerStyle: React.CSSProperties = {
@@ -295,6 +315,5 @@ const errorMessageStyle: React.CSSProperties = {
   fontWeight: '700',
   color: '#333',
 };
-
 
 export default BookDetails;
