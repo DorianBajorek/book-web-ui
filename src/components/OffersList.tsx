@@ -49,8 +49,8 @@ const resultContainerStyle: React.CSSProperties = {
 };
 
 const bookImageStyle: React.CSSProperties = {
-  width: '90px',
-  height: '130px',
+  width: '120px',
+  height: '150px',
   borderRadius: '8px',
   marginRight: '15px',
 };
