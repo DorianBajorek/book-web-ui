@@ -1,31 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BookSlider from './BookSlider';
 import { useAuth } from './UserData';
 import LoadingSpinner from './LoadingSpinner';
+import { getUserOffers } from '../BooksService';
+import { Book } from './Constant';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-
-const books = [
-  { id: '1', image: 'atomowe-nawyki.jpg' },
-  { id: '2', image: 'jobs.png' },
-  { id: '3', image: 'teoria-liczb.png' },
-  { id: '4', image: 'goggins.png' },
-  { id: '5', image: 'korwin.jpg' },
-  { id: '6', image: 'pulapka.jpg' },
-  { id: '7', image: 'wedrowka.png' },
-];
 
 const HomeView: React.FC = () => {
   const { token, logout } = useAuth();
   const navigate = useNavigate();
+  const [books, setBooks] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const data = await getUserOffers(token, 'drugaksiazka');
+        if (data) {
+          setBooks(data);
+        }
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBooks();
+  }, [token]);
 
   const handleLogin = () => {
-    navigate("/login")
-  }
+    navigate('/login');
+  };
 
   const handleRegister = () => {
-    navigate("/register")
-  }
+    navigate('/register');
+  };
 
   const handleDownload = () => {
     const url = 'https://www.drugaksiazka.pl/drugaksiazka.apk';
@@ -41,7 +52,10 @@ const HomeView: React.FC = () => {
     <div style={styles.container}>
       <Helmet>
         <title>Drugaksiazka.pl - Sprzedaj książki online</title>
-        <meta name="description" content="Sprzedaj używane książki szybko i łatwo dzięki naszej aplikacji do skanowania kodów kreskowych." />
+        <meta
+          name="description"
+          content="Sprzedaj używane książki szybko i łatwo dzięki naszej aplikacji do skanowania kodów kreskowych."
+        />
       </Helmet>
       <header style={styles.header}>
         <h1 style={styles.appTitle}>Druga Książka</h1>
@@ -49,18 +63,36 @@ const HomeView: React.FC = () => {
           Druga Książka to platforma, gdzie możesz wymieniać książki i dawać im drugie życie. Dołącz do naszej społeczności, odkrywaj nowe tytuły lub dziel się swoją kolekcją z innymi!
         </p>
       </header>
-      
+
       <div style={styles.imageContainer}>
-        <BookSlider books={books} />
+        {isLoading ? (
+          <LoadingSpinner visible={true} />
+        ) : books.length > 0 ? (
+          <BookSlider
+            books={books.map((book) => ({
+              id: book.offer_id.toString(),
+              image: book.frontImage.replace('http', 'https'),
+              title: book.title,
+            }))}
+          />
+        ) : (
+          <p>Brak książek do wyświetlenia.</p>
+        )}
       </div>
 
       <div style={styles.buttonContainer}>
         {token ? (
-          <button style={styles.button} onClick={logout}>Wyloguj się</button>
+          <button style={styles.button} onClick={logout}>
+            Wyloguj się
+          </button>
         ) : (
           <>
-            <button style={styles.button} onClick={handleRegister}>Zarejestruj się</button>
-            <button style={styles.button} onClick={handleLogin}>Zaloguj się</button>
+            <button style={styles.button} onClick={handleRegister}>
+              Zarejestruj się
+            </button>
+            <button style={styles.button} onClick={handleLogin}>
+              Zaloguj się
+            </button>
           </>
         )}
       </div>
