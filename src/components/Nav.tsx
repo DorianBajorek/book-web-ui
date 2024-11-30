@@ -21,11 +21,11 @@ const Nav: React.FC = () => {
         <li style={styles.navItem}>
           <a href="/" style={styles.navLink}>Strona główna</a>
         </li>
-        {token ? (
-          <>
-            <li style={styles.navItem}>
+        <li style={styles.navItem}>
               <a href="/offers" style={styles.navLink}>Ogłoszenia</a>
             </li>
+        {token ? (
+          <>
             <li style={styles.navItem}>
               <a href={`/profile/${login}`} style={styles.navLink}>Profil</a>
             </li>

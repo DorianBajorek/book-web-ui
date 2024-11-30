@@ -22,7 +22,7 @@ const Profile = () => {
     };
 
     fetchData();
-  }, [token, userLogin]);
+  }, [userLogin]);
 
   return (
     <div style={styles.profileContainer}>
