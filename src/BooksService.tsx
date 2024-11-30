@@ -43,14 +43,7 @@ export const verifyEmail = async (token: string) => {
 export const getUserOffers = async (token: string, username: string) => {
   try {
     const response = await axios.get(
-      `https://drugaksiazka.pl/api/books/v1/get_user_offers/${username}/`,
-      {
-        headers: {
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+      `https://drugaksiazka.pl/api/books/v1/get_user_offers/${username}/`);
     return response.data;
   } catch (error) {
   }
