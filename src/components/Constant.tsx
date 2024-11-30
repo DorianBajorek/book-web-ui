@@ -3,7 +3,7 @@ export interface Book {
     cover_book: string;
     title: string;
     author?: string;
-    user?: string;
+    username?: string;
     frontImage?: string;
     backImage?: string;
     price?: string;

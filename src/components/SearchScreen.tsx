@@ -1,19 +1,36 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getOffersByQuery } from '../BooksService';
+import { getLastAddedOffers, getOffersByQuery } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
+import OffersList from './OffersList';
 
 const SearchScreen = () => {
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [results, setResults] = useState([]);
+  const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
+  const [lastAdddedBooks, setLastAddedBooks] =useState<Book[]>([]);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getLastAddedOffers(token);
+        if (data) {
+          setLastAddedBooks(data);
+        }
+      } catch (error) {
+        console.error('Error fetching last added offers:', error);
+      }
+    };
+
+    fetchData();
+  }, [token]);
+
+  useEffect(() => {
     if (searchQuery.trim() === '') {
-      setResults([]);
+      setSearchedBooks([]);
       return;
     }
     if (debounceTimeout.current) {
@@ -24,10 +41,10 @@ const SearchScreen = () => {
       try {
         const data = await getOffersByQuery(token, searchQuery);
         if (data) {
-          setResults(data);
+          setSearchedBooks(data);
         }
       } catch (error) {
-        console.error('Error fetching search results:', error);
+        console.error('Error fetching search searchedBooks:', error);
       }
     }, 500);
 
@@ -56,25 +73,17 @@ const SearchScreen = () => {
         />
       </div>
       <div style={resultsContainerStyle}>
-        {results.length > 0 ? (
-          results.map((item: Book, index) => (
-            <div key={index} style={resultContainerStyle} onClick={() => handleBookClick(item)}>
-              <img
-                src={item.cover_book.replace('/media/', '/media/cover_images/').replace("http", "https")}
-                alt={`${item.title} cover`}
-                style={bookImageStyle}
-              />
-              <div style={textContainerStyle}>
-                <h3 style={bookTitleStyle}>{item.title}</h3>
-                <p style={bookDescriptionStyle}>Autor: {item.author ? item.author : 'Brak'}</p>
-                <p style={bookDescriptionStyle}>Użytkownik: {item.user}</p>
-                <p style={bookDescriptionStyle}>Cena: {item.price},00zł</p>
-              </div>
-            </div>
-          ))
-        ) : (
+        {searchedBooks.length > 0 ? (
+          <OffersList books={searchedBooks} onBookClick={handleBookClick} />
+        ): searchedBooks.length === 0 ? (
+          <>
+            <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
+            <OffersList books={lastAdddedBooks} onBookClick={handleBookClick} />
+          </>
+        ) : 
+        <>
           <p style={noResultsTextStyle}>Brak wyników</p>
-        )}
+        </>}
       </div>
     </div>
   );
@@ -87,7 +96,7 @@ const containerStyle: React.CSSProperties = {
   alignItems: 'center',
   backgroundColor: '#f4f4f4',
   fontFamily: 'Roboto, sans-serif',
-  minHeight: "100vh"
+  minHeight: '100vh',
 };
 
 const titleTextStyle: React.CSSProperties = {
@@ -118,48 +127,6 @@ const resultsContainerStyle: React.CSSProperties = {
   width: '100%',
   maxWidth: '600px',
   marginTop: '20px',
-};
-
-const resultContainerStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  backgroundColor: '#fff',
-  padding: '15px',
-  borderRadius: '10px',
-  marginBottom: '15px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  cursor: 'pointer',
-  border: '1px solid #f0f0f0',
-  transition: 'transform 0.2s ease',
-};
-
-const bookImageStyle: React.CSSProperties = {
-  width: '90px',
-  height: '130px',
-  borderRadius: '8px',
-  marginRight: '15px',
-};
-
-const textContainerStyle: React.CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-};
-  
-const bookDescriptionStyle: React.CSSProperties = {
-    fontSize: '14px',
-    color: '#666',
-    marginTop: '4px',
-    textAlign: 'left',
-    marginBottom: '-4px',
-    fontWeight: '700'
-};
-
-const bookTitleStyle: React.CSSProperties = {
-  fontSize: '18px',
-  fontWeight: '600',
-  color: '#333',
-  marginBottom: '4px',
 };
 
 const noResultsTextStyle: React.CSSProperties = {
