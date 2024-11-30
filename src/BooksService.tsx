@@ -51,6 +51,7 @@ export const getUserOffers = async (token: string, username: string) => {
         },
       }
     );
+    console.log(response.data)
     return response.data;
   } catch (error) {
   }
@@ -118,11 +119,7 @@ export const getLastAddedOffers = async (token: string) => {
 export const getOfferById = async (token: string, offerId: string) => {
   try {
     const url = `https://drugaksiazka.pl/api/books/v1/get_offer/${offerId}/`;
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    });
+    const response = await axios.get(url);
     return response.data;
   } catch (error) {
     throw error;

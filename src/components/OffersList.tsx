@@ -46,11 +46,12 @@ const resultContainerStyle: React.CSSProperties = {
   cursor: 'pointer',
   border: '1px solid #f0f0f0',
   transition: 'transform 0.2s ease',
+  paddingLeft: '20px'
 };
 
 const bookImageStyle: React.CSSProperties = {
-  width: '90px',
-  height: '130px',
+  width: '130px',
+  height: '160px',
   borderRadius: '8px',
   marginRight: '15px',
 };

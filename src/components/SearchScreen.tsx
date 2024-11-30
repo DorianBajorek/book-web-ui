@@ -125,7 +125,7 @@ const searchInputStyle: React.CSSProperties = {
 
 const resultsContainerStyle: React.CSSProperties = {
   width: '100%',
-  maxWidth: '600px',
+  maxWidth: '900px',
   marginTop: '20px',
 };
 
