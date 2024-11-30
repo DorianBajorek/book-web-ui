@@ -4,7 +4,7 @@ export interface Book {
     title: string;
     author?: string;
     username?: string;
-    frontImage?: string;
-    backImage?: string;
+    frontImage: string;
+    backImage: string;
     price?: string;
   }
