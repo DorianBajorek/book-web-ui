@@ -40,7 +40,7 @@ export const verifyEmail = async (token: string) => {
   }
 };
 
-export const getUserOffers = async (token: string, username: string) => {
+export const getUserOffers = async (username: string) => {
   try {
     const response = await axios.get(
       `https://drugaksiazka.pl/api/books/v1/get_user_offers/${username}/`);
@@ -49,7 +49,7 @@ export const getUserOffers = async (token: string, username: string) => {
   }
 };
 
-export const getUserData = async (token: string, username: string) => {
+export const getUserData = async (username: string) => {
   try {
     const response = await axios.get(
       `https://drugaksiazka.pl/api/auth/v1/get_user_data/${username}/`);
@@ -90,11 +90,10 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
   }
 }
 
-export const getLastAddedOffers = async (token: string) => {
+export const getLastAddedOffers = async () => {
   try {
     const url = `https://drugaksiazka.pl/api/books/v1/get_last_added_offers`;
     const response = await axios.get(url);
-    console.log(response)
     return response.data;
   } catch (error) {
     return null;

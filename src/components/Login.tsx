@@ -14,7 +14,6 @@ const Login: React.FC = () => {
   const handleLogin = async () => {
     try {
       const data = await loginUser(username, password);
-      console.log(data)
       if (data) {
         updateToken(data.token);
         updateUserName(data.username);
@@ -28,6 +27,12 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
   return (
     <div style={styles.pageContainer}>
       {showError && <ErrorBanner message="Nieprawidłowa nazwa użytkownika lub hasła" />}
@@ -38,6 +43,7 @@ const Login: React.FC = () => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
             style={styles.input}
             placeholder="Username"
           />
@@ -49,6 +55,7 @@ const Login: React.FC = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyDown={handleKeyDown}
             style={styles.input}
             placeholder="Password"
           />

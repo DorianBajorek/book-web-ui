@@ -16,7 +16,7 @@ const SearchScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getLastAddedOffers(token);
+        const data = await getLastAddedOffers();
         if (data) {
           setLastAddedBooks(data);
         }

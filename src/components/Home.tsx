@@ -16,7 +16,7 @@ const HomeView: React.FC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const data = await getUserOffers(token, 'drugaksiazka');
+        const data = await getUserOffers('drugaksiazka');
         if (data) {
           setBooks(data);
         }
@@ -196,7 +196,7 @@ const styles = {
     },
     infoContainer: {
       textAlign: 'center' as const,
-      padding: '20px 0',
+      padding: '20px 10px',
       backgroundColor: '#eaf0f6',
       borderRadius: '10px',
       marginBottom: '30px',

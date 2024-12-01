@@ -19,7 +19,7 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const data = await getUserOffers(token, username);
+        const data = await getUserOffers(username);
         if (data) {
           setBooks(data);
         }

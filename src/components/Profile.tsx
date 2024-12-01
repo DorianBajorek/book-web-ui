@@ -8,12 +8,12 @@ const Profile = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const { userLogin } = useParams<{ userLogin: string }>();
-  const { token, login } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (token && userLogin) {
-        const data = await getUserData(token, userLogin);
+      if (userLogin) {
+        const data = await getUserData(userLogin);
         if (data) {
           setEmail(data.email || '');
           setPhoneNumber(data.phoneNumber || '');
@@ -81,8 +81,8 @@ const styles: {
     marginBottom: '20px',
   },
   avatar: {
-    width: '120px',
-    height: '120px',
+    width: '18%',
+    height: 'auto',
     borderRadius: '50%',
     marginRight: '20px',
     border: '2px solid #4682b4',
