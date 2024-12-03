@@ -12,6 +12,7 @@ import BookDetails from './components/BookDetails';
 import SearchScreen from './components/SearchScreen';
 import NavMobileView from './components/NavMobileView';
 import EmailVerification from './components/VerificationView';
+import ResetPassword from './components/ResetPassword';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -41,6 +42,7 @@ function App() {
             <Route path="/book-details/:offer_id" element={<BookDetails />} />
             <Route path="/offers" element={<SearchScreen />} />
             <Route path="/verification" element={<EmailVerification />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
           </Routes>
         </div>
       </Router>
