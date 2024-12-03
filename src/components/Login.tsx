@@ -27,6 +27,10 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleChangePassword = () => {
+    navigate('/reset-password');
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleLogin();
@@ -59,6 +63,11 @@ const Login: React.FC = () => {
             style={styles.input}
             placeholder="Password"
           />
+          <div style={styles.changePasswordContainer}>
+            <span style={styles.textLink} onClick={handleChangePassword}>
+              Zapomniałeś hasła?
+            </span>
+          </div>
         </div>
 
         <button type="button" onClick={handleLogin} style={styles.button}>
@@ -104,6 +113,18 @@ const styles = {
     border: '1px solid #e0e0e0',
     outline: 'none',
     backgroundColor: '#f9f9f9',
+  },
+  changePasswordContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end' as const,
+    marginTop: '10px',
+  },
+  textLink: {
+    fontSize: '14px',
+    color: '#4682b4',
+    cursor: 'pointer' as const,
+    textDecoration: 'underline',
+    transition: 'color 0.3s',
   },
   button: {
     marginTop: '20px',

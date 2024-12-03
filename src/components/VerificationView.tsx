@@ -13,11 +13,11 @@ const EmailVerification = () => {
   const handleVerification = async () =>  {
     if(token){
         try {
-            await verifyEmail(token);
-            setVerified(true);
+          await verifyEmail(token);
+          setVerified(true);
         } catch(error){
-            setShowError(true);
-            setTimeout(() => setShowError(false), 5000);
+          setShowError(true);
+          setTimeout(() => setShowError(false), 5000);
         }
     }
   };

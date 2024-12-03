@@ -36,7 +36,30 @@ export const verifyEmail = async (token: string) => {
     const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/verify_email/", payload);
     return response.data;
   } catch (error) {
-    throw error;
+  }
+};
+
+export const requestResetPassword = async (email: string) => {
+  try {
+    const payload = {
+      email: email
+    };
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/request_reset_password/", payload);
+    return response.data;
+  } catch (error) {
+  }
+};
+
+export const resetPassword = async (uid: string, token: string, newPassword: string) => {
+  try {
+    const payload = {
+      uid: uid,
+      token: token,
+      new_password: newPassword
+    };
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/request_reset_password/", payload);
+    return response.data;
+  } catch (error) {
   }
 };
 
