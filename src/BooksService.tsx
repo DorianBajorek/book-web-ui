@@ -102,9 +102,6 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
   try {
     const url = `https://drugaksiazka.pl/api/books/v1/search_users_with_title/?searchQuery=${encodeURIComponent(searchQuery)}`;
     const response = await axios.get(url, {
-      headers: {
-        Authorization: `Token ${token}`
-      }
     });
     return response.data;
   } catch (error) {
@@ -129,6 +126,26 @@ export const getOfferById = async (token: string, offerId: string) => {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const exportUserOffers = async (token: string) => {
+  try {
+    const response = await axios.get(
+      `https://drugaksiazka.pl/api/books/v1/export_user_offers/`,
+      {
+        responseType: 'blob',
+        headers: {
+          Authorization: `Token ${token}`
+        }
+      }
+    );
+
+    const blob = new Blob([response.data], { type: 'text/plain' });
+    return blob;
+  } catch (error) {
+    console.error('Error exporting user offers:', error);
     throw error;
   }
 };
