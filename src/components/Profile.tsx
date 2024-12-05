@@ -2,13 +2,13 @@ import React, { useState, CSSProperties, useEffect } from 'react';
 import { useAuth } from './UserData';
 import BooksList from './BookList';
 import { useParams } from 'react-router-dom';
-import { getUserData } from '../BooksService';
+import { getUserData, exportUserOffers } from '../BooksService';
 
 const Profile = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const { userLogin } = useParams<{ userLogin: string }>();
-  const { login } = useAuth();
+  const { login, token } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,6 +23,30 @@ const Profile = () => {
 
     fetchData();
   }, [userLogin]);
+
+  const handleDownloadBooks = async () => {
+    try {
+      const username = userLogin || login;
+      if (!username) {
+        alert('Brak nazwy użytkownika.');
+        return;
+      }
+
+      const blob = await exportUserOffers(token);
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${username}_books.txt`; 
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      alert('Nie udało się pobrać listy książek.');
+      console.error('Error downloading user offers:', error);
+    }
+  };
 
   return (
     <div style={styles.profileContainer}>
@@ -45,6 +69,11 @@ const Profile = () => {
           )}
         </div>
       </div>
+      {token && (
+        <button type="button" onClick={handleDownloadBooks} style={styles.button}>
+          Pobierz listę książek
+        </button>
+      )}
       <BooksList username={userLogin || login} />
     </div>
   );
@@ -58,6 +87,7 @@ const styles: {
   infoRow: CSSProperties;
   label: CSSProperties;
   infoValue: CSSProperties;
+  button: CSSProperties;
 } = {
   profileContainer: {
     fontFamily: 'Arial, sans-serif',
@@ -111,6 +141,19 @@ const styles: {
     fontWeight: '600',
     flexBasis: '70%',
     textAlign: 'left',
+  },
+  button: {
+    marginTop: '20px',
+    padding: '12px 10px',
+    borderRadius: '25px',
+    fontSize: '16px',
+    fontWeight: 'bold' as const,
+    color: '#fff',
+    backgroundColor: '#4682b4',
+    border: 'none',
+    cursor: 'pointer' as const,
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+    transition: 'background-color 0.3s',
   },
 };
 
