@@ -33,8 +33,8 @@ const Register: React.FC = () => {
         updatePhoneNumber(data?.phoneNumber)
         navigate('/');
       }
-    } catch (error) {
-      setShowError('Użytkownik o takich danych już istnieje.');
+    } catch (error: any) {
+      setShowError(error.response.data.error[0]);
       setTimeout(() => setShowError(''), 5000);
     }
   };
