@@ -111,8 +111,19 @@ const HomeView: React.FC = () => {
           <button style={styles.button}>Pobierz</button>
         </a>
       </div>
+      <div style={styles.videoContainer}>
+        <h2 style={styles.videoTitle}>Zobacz, jak to działa!</h2>
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/kmojTJZggyU"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
       <div style={styles.howItWorksContainer}>
-        <h2 style={styles.howItWorksTitle}>Jak to działa?</h2>
         <div style={styles.howItWorksStepsContainer}>
           <p style={styles.howItWorksStep}>📖 Skanujesz kod kreskowy.</p>
           <p style={styles.howItWorksStep}>📷 Robisz zdjęcie przodu książki.</p>
@@ -207,6 +218,20 @@ const styles = {
       lineHeight: '1.6',
       maxWidth: '800px',
       margin: '0 auto',
+    },
+    videoContainer: {
+      textAlign: 'center' as const,
+      margin: '30px auto',
+      padding: '20px',
+      backgroundColor: '#eaf0f6',
+      borderRadius: '15px',
+      maxWidth: '800px',
+    },
+    videoTitle: {
+      fontSize: '24px',
+      fontWeight: '700',
+      color: '#2e86c1',
+      marginBottom: '15px',
     },
     howItWorksContainer: {
       padding: '20px',
