@@ -113,15 +113,16 @@ const HomeView: React.FC = () => {
       </div>
       <div style={styles.videoContainer}>
         <h2 style={styles.videoTitle}>Zobacz, jak to działa!</h2>
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/kmojTJZggyU"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div style={styles.responsiveIframeContainer}>
+          <iframe
+            src="https://www.youtube.com/embed/kmojTJZggyU"
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={styles.responsiveIframe}
+          ></iframe>
+        </div>
       </div>
       <div style={styles.howItWorksContainer}>
         <div style={styles.howItWorksStepsContainer}>
@@ -264,6 +265,23 @@ const styles = {
       display: 'flex',
       alignItems: 'center' as const,
       justifyContent: 'center' as const,
+    },
+    responsiveIframeContainer: {
+      position: 'relative' as const,
+      width: '100%',
+      paddingBottom: '56.25%',
+      height: 0,
+      overflow: 'hidden',
+      backgroundColor: '#000',
+      borderRadius: '8px',
+    },
+    responsiveIframe: {
+      position: 'absolute' as const,
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      border: 'none',
     },
   };
   
