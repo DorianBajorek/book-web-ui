@@ -98,7 +98,7 @@ const HomeView: React.FC = () => {
       </div>
       <div style={styles.infoContainer}>
         <p style={styles.infoText}>
-          W Drugiej Książce możesz wymieniać książki z innymi. Połącz się z innymi użytkownikami, dziel się swoimi opiniami, odkrywaj nowe perspektywy i wzbogacaj swoje doświadczenia czytelnicze!
+        W Drugiej Książce możesz wymieniać książki z innymi użytkownikami i odkrywać nowe perspektywy czytelnicze. Połącz się z innymi użytkownikami, aby wymieniać książki, poznawać nowe tytuły i wzbogacać swoje doświadczenia literackie!
         </p>
       </div>
       <div style={styles.downloadAppContainer}>
