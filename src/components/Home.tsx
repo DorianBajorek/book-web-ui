@@ -4,12 +4,10 @@ import { useAuth } from './UserData';
 import LoadingSpinner from './LoadingSpinner';
 import { getUserOffers } from '../BooksService';
 import { Book } from './Constant';
-import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 const HomeView: React.FC = () => {
   const { token, logout } = useAuth();
-  const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -29,14 +27,6 @@ const HomeView: React.FC = () => {
 
     fetchBooks();
   }, [token]);
-
-  const handleLogin = () => {
-    navigate('/login');
-  };
-
-  const handleRegister = () => {
-    navigate('/register');
-  };
 
   const handleDownload = () => {
     const url = 'https://www.drugaksiazka.pl/drugaksiazka.apk';
@@ -87,10 +77,10 @@ const HomeView: React.FC = () => {
           </button>
         ) : (
           <>
-            <a href="/register" style={styles.button}>
+            <a href="/rejstracja" style={styles.button}>
               Zarejestruj się
             </a>
-            <a href="/login" style={styles.button}>
+            <a href="/logowanie" style={styles.button}>
               Zaloguj się
             </a>
           </>
@@ -109,6 +99,17 @@ const HomeView: React.FC = () => {
         <a onClick={handleDownload}>
           <button style={styles.button}>Pobierz</button>
         </a>
+        {false && (
+        <div style={styles.logoContainer}>
+        <a href="https://apps.apple.com" target="_blank" rel="noopener noreferrer">
+          <img src="/app-store-logo.png" alt="Pobierz na App Store" style={styles.appleLogo} />
+        </a>
+        <a href="https://play.google.com" target="_blank" rel="noopener noreferrer">
+          <img src="/sklep-play-logo.png" alt="Pobierz na Google Play" style={styles.googleLogo} />
+        </a>
+      </div>
+        )}
+
       </div>
       <div style={styles.videoContainer}>
         <h2 style={styles.videoTitle}>Zobacz, jak to działa!</h2>
@@ -297,7 +298,21 @@ const styles = {
       height: '100%',
       border: 'none',
     },
+    logoContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '20px',
+      marginTop: '50px',
+    },
+    appleLogo: {
+      marginTop: '10px',
+      width: '120x',
+      height: '50px',
+    },
+    googleLogo: {
+      width: '180px',
+      height: '70px',
+    }
   };
-  
 
 export default HomeView;

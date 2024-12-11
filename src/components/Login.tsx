@@ -28,7 +28,7 @@ const Login: React.FC = () => {
   };
 
   const handleChangePassword = () => {
-    navigate('/reset-password');
+    navigate('/zmiana-hasla');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

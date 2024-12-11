@@ -11,7 +11,7 @@ const OffersList = ({ books }: OffersListProps) => {
       {books.map((item, index) => (
         <a
           key={index}
-          href={`/book-details/${item.offer_id}`}
+          href={`/oferta/${item.offer_id}`}
           style={resultContainerStyle}
         >
           {item.frontImage && (

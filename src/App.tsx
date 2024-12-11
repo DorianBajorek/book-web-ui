@@ -13,6 +13,7 @@ import SearchScreen from './components/SearchScreen';
 import NavMobileView from './components/NavMobileView';
 import EmailVerification from './components/VerificationView';
 import ResetPassword from './components/ResetPassword';
+import Footer from './components/Footer';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -36,14 +37,15 @@ function App() {
 
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/profile/:userLogin" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/book-details/:offer_id" element={<BookDetails />} />
-            <Route path="/offers" element={<SearchScreen />} />
+            <Route path="/profil/:userLogin" element={<Profile />} />
+            <Route path="/logowanie" element={<Login />} />
+            <Route path="/rejstracja" element={<Register />} />
+            <Route path="/oferta/:offer_id" element={<BookDetails />} />
+            <Route path="/oferty" element={<SearchScreen />} />
             <Route path="/verification" element={<EmailVerification />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/zmiana-hasla" element={<ResetPassword />} />
           </Routes>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

@@ -24,7 +24,7 @@ const ResetPassword: React.FC = () => {
     console.log(`Reset password link sent to: ${email}`);
     await requestResetPassword(email);
     setEmailSent(true);
-    setTimeout(() => navigate('/login'), 3000);
+    setTimeout(() => navigate('/logowanie'), 3000);
   };
 
   const handleResetPassword = async () => {
@@ -37,7 +37,7 @@ const ResetPassword: React.FC = () => {
       await resetPassword(uid, token, newPassword);
     }
     alert('Hasło zostało zmienione.');
-    navigate('/login');
+    navigate('/logowanie');
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {

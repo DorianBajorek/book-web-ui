@@ -19,7 +19,7 @@ const SearchScreen = () => {
           setLastAddedBooks(data);
         }
       } catch (error) {
-        console.error('Error fetching last added offers:', error);
+        console.error('Error fetching last added oferty:', error);
       }
     };
 

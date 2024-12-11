@@ -50,7 +50,7 @@ const BookDetails: React.FC = () => {
   }, [offer_id, token]);
 
   const handleNavigateToUserProfile = (username: string) => {
-    navigate(`/profile/${username}`);
+    navigate(`/profil/${username}`);
   };
 
   const handleDelete = async () => {
@@ -58,7 +58,7 @@ const BookDetails: React.FC = () => {
       setIsDeleteOfferInProgress(true);
       await deleteOffer(token, offer_id);
       setIsDeleteOfferInProgress(false);
-      navigate('/profile/' + login);
+      navigate('/profil/' + login);
     } catch (error) {
       console.error("Failed to delete offer", error);
       alert("Failed to delete the offer");

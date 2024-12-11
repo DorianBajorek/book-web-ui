@@ -21,7 +21,7 @@ export const loginUser = async (username: string, password: string) => {
       username: username,
       password: password
     };
-    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/login/", payload);
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/logowanie/", payload);
     return response.data;
   } catch (error) {
     throw error;
@@ -78,7 +78,7 @@ export const getUserData = async (username: string) => {
       `https://drugaksiazka.pl/api/auth/v1/get_user_data/${username}/`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching user offers:", error);
+    console.error("Error fetching user oferty:", error);
   }
 };
 
@@ -145,7 +145,7 @@ export const exportUserOffers = async (token: string) => {
     const blob = new Blob([response.data], { type: 'text/plain' });
     return blob;
   } catch (error) {
-    console.error('Error exporting user offers:', error);
+    console.error('Error exporting user oferty:', error);
     throw error;
   }
 };

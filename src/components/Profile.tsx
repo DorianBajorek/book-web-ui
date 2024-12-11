@@ -44,7 +44,7 @@ const Profile = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       alert('Nie udało się pobrać listy książek.');
-      console.error('Error downloading user offers:', error);
+      console.error('Error downloading user oferty:', error);
     }
   };
 

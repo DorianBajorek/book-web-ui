@@ -17,7 +17,7 @@ const BookSlider: React.FC<BookSliderProps> = ({ books }) => {
   const navigate = useNavigate();
 
   const handleBookClick = (offerId: string) => {
-    navigate(`/book-details/${offerId}`)
+    navigate(`/oferta/${offerId}`)
   };
 
   return (
