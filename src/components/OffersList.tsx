@@ -1,35 +1,35 @@
 import React from 'react';
 import { Book } from './Constant';
 
-
 type OffersListProps = {
   books: Book[];
-  onBookClick: (book: Book) => void;
 };
 
-const OffersList = ({ books, onBookClick }: OffersListProps) => {
+const OffersList = ({ books }: OffersListProps) => {
   return (
     <div>
       {books.map((item, index) => (
-        <div
+        <a
           key={index}
+          href={`/book-details/${item.offer_id}`}
           style={resultContainerStyle}
-          onClick={() => onBookClick(item)}
         >
           {item.frontImage && (
             <img
-            src={item.frontImage.replace("http", "https")}
-            alt={`${item.title} cover`}
-            style={bookImageStyle}
-          />
+              src={item.frontImage.replace('http', 'https')}
+              alt={`${item.title} cover`}
+              style={bookImageStyle}
+            />
           )}
           <div style={textContainerStyle}>
             <h3 style={bookTitleStyle}>{item.title}</h3>
-            <p style={bookDescriptionStyle}>Autor: {item.author ? item.author : 'Brak'}</p>
+            <p style={bookDescriptionStyle}>
+              Autor: {item.author ? item.author : 'Brak'}
+            </p>
             <p style={bookDescriptionStyle}>Użytkownik: {item.username}</p>
             <p style={bookDescriptionStyle}>Cena: {item.price},00zł</p>
           </div>
-        </div>
+        </a>
       ))}
     </div>
   );
@@ -43,9 +43,11 @@ const resultContainerStyle: React.CSSProperties = {
   borderRadius: '10px',
   marginBottom: '15px',
   boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  cursor: 'pointer',
+  textDecoration: 'none',
+  color: 'inherit',
   border: '1px solid #f0f0f0',
   transition: 'transform 0.2s ease',
+  cursor: 'pointer',
 };
 
 const bookImageStyle: React.CSSProperties = {

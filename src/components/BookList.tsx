@@ -1,6 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from 'react';
 import { getUserOffers } from '../BooksService';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
 import LoadingSpinner from './LoadingSpinner';
@@ -14,7 +13,6 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
   const { token, isDeleteOfferInProgress } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -33,10 +31,6 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
     fetchBooks();
   }, [token, username, isDeleteOfferInProgress]);
 
-  const handleBookClick = (book: Book) => {
-    navigate(`/book-details/${book.offer_id.toString()}`);
-  };
-
   return (
     <div style={styles.container}>
       <LoadingSpinner visible={isLoading} />
@@ -44,7 +38,7 @@ const BooksList: React.FC<BooksListProps> = ({ username }) => {
       {!isLoading && books.length === 0 && <p>Brak książek do wyświetlenia.</p>}
 
       {!isLoading && books.length > 0 && (
-        <OffersList books={books.slice().reverse()} onBookClick={handleBookClick} />
+        <OffersList books={books.slice().reverse()}  />
       )}
     </div>
   );

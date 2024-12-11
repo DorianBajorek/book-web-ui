@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getLastAddedOffers, getOffersByQuery } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
@@ -11,7 +10,6 @@ const SearchScreen = () => {
   const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
   const [lastAdddedBooks, setLastAddedBooks] =useState<Book[]>([]);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,11 +53,6 @@ const SearchScreen = () => {
     };
   }, [searchQuery, token]);
 
-  const handleBookClick = (book: Book) => {
-    const offerId = book.offer_id;
-    navigate(`/book-details/${offerId}`);
-  };
-
   return (
     <div style={containerStyle}>
       <h1 style={titleTextStyle}>Znajdź książkę po tytule</h1>
@@ -74,11 +67,11 @@ const SearchScreen = () => {
       </div>
       <div style={resultsContainerStyle}>
         {searchedBooks.length > 0 ? (
-          <OffersList books={searchedBooks} onBookClick={handleBookClick} />
+          <OffersList books={searchedBooks} />
         ): searchedBooks.length === 0 ? (
           <>
             <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
-            <OffersList books={lastAdddedBooks} onBookClick={handleBookClick} />
+            <OffersList books={lastAdddedBooks} />
           </>
         ) : 
         <>

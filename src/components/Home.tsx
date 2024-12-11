@@ -87,16 +87,15 @@ const HomeView: React.FC = () => {
           </button>
         ) : (
           <>
-            <button style={styles.button} onClick={handleRegister}>
+            <a href="/register" style={styles.button}>
               Zarejestruj się
-            </button>
-            <button style={styles.button} onClick={handleLogin}>
+            </a>
+            <a href="/login" style={styles.button}>
               Zaloguj się
-            </button>
+            </a>
           </>
         )}
       </div>
-
       <div style={styles.infoContainer}>
         <p style={styles.infoText}>
           W Drugiej Książce możesz wymieniać książki z innymi. Połącz się z innymi użytkownikami, dziel się swoimi opiniami, odkrywaj nowe perspektywy i wzbogacaj swoje doświadczenia czytelnicze!
@@ -162,6 +161,20 @@ const styles = {
       margin: '0 auto 30px',
       maxWidth: '1200px',
     },
+    link: {
+      color: '#4682b4',
+      textDecoration: 'none',
+      fontSize: '16px',
+      fontWeight: 'bold',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      backgroundColor: '#f7f9fc',
+      border: '2px solid #4682b4',
+      display: 'inline-block',
+      textAlign: 'center' as const,
+      transition: 'background-color 0.3s',
+      cursor: 'pointer' as const,
+    },
     downloadAppTitle: {
       fontSize: '24px',
       fontWeight: '700',
@@ -196,6 +209,7 @@ const styles = {
     },
     button: {
       backgroundColor: '#4682b4',
+      textDecoration: 'none',
       color: '#fff',
       padding: '12px 20px',
       borderRadius: '8px',
