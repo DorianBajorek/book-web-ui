@@ -14,6 +14,7 @@ import NavMobileView from './components/NavMobileView';
 import EmailVerification from './components/VerificationView';
 import ResetPassword from './components/ResetPassword';
 import Footer from './components/Footer';
+import ContactView from './components/ContactView';
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -26,7 +27,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
+        <div className="App" style={{backgroundColor: "#f5f8fa"}}>
           {windowWidth < 600 ? <NavMobileView /> : <Nav />}
           <Helmet>
             <title>Drugaksiazka.pl - Sprzedaj używane książki online</title>
@@ -44,6 +45,7 @@ function App() {
             <Route path="/oferty" element={<SearchScreen />} />
             <Route path="/verification" element={<EmailVerification />} />
             <Route path="/zmiana-hasla" element={<ResetPassword />} />
+            <Route path="/kontakt" element={<ContactView />} />
           </Routes>
           <Footer />
         </div>
