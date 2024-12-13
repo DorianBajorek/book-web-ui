@@ -39,6 +39,9 @@ const Nav: React.FC = () => {
             </li>
           </>
         )}
+        <li style={styles.navItem}>
+          <a href="/kontakt" style={styles.navLink}>Kontakt</a>
+        </li>
       </ul>
     </nav>
   );
