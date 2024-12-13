@@ -30,7 +30,7 @@ const Register: React.FC = () => {
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);
-        updatePhoneNumber(data?.phoneNumber)
+        updatePhoneNumber(data?.phoneNumber);
         navigate('/');
       }
     } catch (error: any) {
@@ -128,6 +128,15 @@ const Register: React.FC = () => {
         <button type="button" onClick={handleRegister} style={styles.button}>
           Zarejestruj się
         </button>
+
+        <a href="/auth/google" style={styles.googleButton}>
+          <img
+            src="/google-logo.png"
+            alt="Google logo"
+            style={styles.googleLogo}
+          />
+          <span style={styles.googleText}>Zarejestruj się przez Google</span>
+        </a>
       </div>
     </div>
   );
@@ -135,6 +144,7 @@ const Register: React.FC = () => {
 
 const styles = {
   pageContainer: {
+    fontFamily: '"Roboto", sans-serif', 
     display: 'flex',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -203,6 +213,29 @@ const styles = {
     fontSize: '16px',
     color: '#333',
     zIndex: 10,
+  },
+  googleButton: {
+    display: 'flex',
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    marginTop: '15px',
+    padding: '10px',
+    borderRadius: '25px',
+    border: '1px solid #e0e0e0',
+    backgroundColor: '#fff',
+    textDecoration: 'none',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+    transition: 'background-color 0.3s',
+    cursor: 'pointer' as const,
+  },
+  googleLogo: {
+    width: '20px',
+    height: '20px',
+    marginRight: '10px',
+  },
+  googleText: {
+    fontSize: '16px',
+    color: '#333',
   },
 };
 

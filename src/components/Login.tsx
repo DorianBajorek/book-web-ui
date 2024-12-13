@@ -73,6 +73,14 @@ const Login: React.FC = () => {
         <button type="button" onClick={handleLogin} style={styles.button}>
           Login
         </button>
+        <a href="/auth/google" style={styles.googleButton}>
+          <img
+            src="/google-logo.png"
+            alt="Google logo"
+            style={styles.googleLogo}
+          />
+          <span style={styles.googleText}>Zaloguj się przez Google</span>
+        </a>
       </div>
     </div>
   );
@@ -80,6 +88,7 @@ const Login: React.FC = () => {
 
 const styles = {
   pageContainer: {
+    fontFamily: '"Roboto", sans-serif', 
     display: 'flex',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -139,6 +148,30 @@ const styles = {
     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
     transition: 'background-color 0.3s',
   },
+  googleButton: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '15px',
+    padding: '10px',
+    borderRadius: '25px',
+    border: '1px solid #e0e0e0',
+    backgroundColor: '#fff',
+    textDecoration: 'none',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+    transition: 'background-color 0.3s',
+    cursor: 'pointer',
+  },
+  googleLogo: {
+    width: '20px',
+    height: '20px',
+    marginRight: '10px',
+  },
+  googleText: {
+    fontSize: '16px',
+    color: '#333',
+  },
+  
 };
 
 export default Login;

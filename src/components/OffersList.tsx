@@ -64,14 +64,14 @@ const textContainerStyle: React.CSSProperties = {
 };
 
 const bookTitleStyle: React.CSSProperties = {
-  fontSize: '18px',
+  fontSize: '20px',
   fontWeight: '600',
   color: '#333',
   marginBottom: '4px',
 };
 
 const bookDescriptionStyle: React.CSSProperties = {
-  fontSize: '14px',
+  fontSize: '16px',
   color: '#666',
   marginTop: '4px',
   textAlign: 'left',
