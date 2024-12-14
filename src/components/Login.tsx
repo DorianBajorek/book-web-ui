@@ -3,6 +3,7 @@ import { loginUser } from '../BooksService';
 import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import ErrorBanner from './Banners/ErrorBanner';
+import GoogleButton from 'react-google-button';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -26,6 +27,31 @@ const Login: React.FC = () => {
       setTimeout(() => setShowError(false), 5000);
     }
   };
+
+  const onGoogleLoginSuccess = () => {
+    const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
+  
+    const scope = [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile'
+    ].join(' ');
+  
+    const clientId = '894874389822-vus90gg05gp7p6n8g5roor2nibcsli3b.apps.googleusercontent.com';
+    const redirectUri = 'https://drugaksiazka.pl/';
+  
+    const params = {
+      response_type: 'code',
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      prompt: 'select_account',
+      access_type: 'offline',
+      scope
+    };
+  
+    const urlParams = new URLSearchParams(params as Record<string, string>).toString();
+    window.open(`${GOOGLE_AUTH_URL}?${urlParams}`, '_blank', 'noopener,noreferrer');
+  };
+
 
   const handleChangePassword = () => {
     navigate('/zmiana-hasla');
@@ -73,14 +99,7 @@ const Login: React.FC = () => {
         <button type="button" onClick={handleLogin} style={styles.button}>
           Login
         </button>
-        <a href="/auth/google" style={styles.googleButton}>
-          <img
-            src="/google-logo.png"
-            alt="Google logo"
-            style={styles.googleLogo}
-          />
-          <span style={styles.googleText}>Zaloguj się przez Google</span>
-        </a>
+        <GoogleButton style={styles.googleButton} onClick={onGoogleLoginSuccess} label="Zaloguj się przez Google" />
       </div>
     </div>
   );
@@ -149,27 +168,19 @@ const styles = {
     transition: 'background-color 0.3s',
   },
   googleButton: {
+    marginTop: '20px',
+    borderRadius: '25px',
+    fontSize: '16px',
+    color: '#000',
+    backgroundColor: '#fff',
+    border: 'none',
+    cursor: 'pointer' as const,
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: '15px',
-    padding: '10px',
-    borderRadius: '25px',
-    border: '1px solid #e0e0e0',
-    backgroundColor: '#fff',
-    textDecoration: 'none',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
-    transition: 'background-color 0.3s',
-    cursor: 'pointer',
-  },
-  googleLogo: {
-    width: '20px',
-    height: '20px',
-    marginRight: '10px',
-  },
-  googleText: {
-    fontSize: '16px',
-    color: '#333',
+    gap: '10px',
+    width:'100%'
   },
   
 };
