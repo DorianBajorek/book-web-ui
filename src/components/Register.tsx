@@ -26,7 +26,6 @@ const Register: React.FC = () => {
       'https://www.googleapis.com/auth/userinfo.profile'
     ].join(' ');
   
-    // Hardcode the client_id and base API URL directly in the component.
     const clientId = '894874389822-vus90gg05gp7p6n8g5roor2nibcsli3b.apps.googleusercontent.com';
     const redirectUri = 'https://drugaksiazka.pl/';
   
@@ -155,7 +154,7 @@ const Register: React.FC = () => {
         <button type="button" onClick={handleRegister} style={styles.button}>
           Zarejestruj się
         </button>
-        <GoogleButton onClick={onGoogleLoginSuccess} label="Sign in with Google" />
+        <GoogleButton style={styles.googleButton} onClick={onGoogleLoginSuccess} label="Zarejestruj się przez Google" />
       </div>
     </div>
   );
@@ -234,27 +233,19 @@ const styles = {
     zIndex: 10,
   },
   googleButton: {
-    display: 'flex',
-    alignItems: 'center' as const,
-    justifyContent: 'center' as const,
-    marginTop: '15px',
-    padding: '10px',
+    marginTop: '20px',
     borderRadius: '25px',
-    border: '1px solid #e0e0e0',
-    backgroundColor: '#fff',
-    textDecoration: 'none',
-    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
-    transition: 'background-color 0.3s',
-    cursor: 'pointer' as const,
-  },
-  googleLogo: {
-    width: '20px',
-    height: '20px',
-    marginRight: '10px',
-  },
-  googleText: {
     fontSize: '16px',
-    color: '#333',
+    color: '#000',
+    backgroundColor: '#fff',
+    border: 'none',
+    cursor: 'pointer' as const,
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.3)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    width:'100%'
   },
 };
 
