@@ -11,22 +11,23 @@ const Footer: React.FC = () => {
   
   const styles = {
     footerContainer: {
+      fontFamily: '"Roboto", sans-serif', 
       textAlign: 'center' as const,
       padding: '20px',
       backgroundColor: '#f5f8fa',
       borderTop: '1px solid #e0e0e0',
-
     },
     link: {
       display: 'inline-block',
       margin: '0 10px',
     },
     icon: {
-      width: '24px',
-      height: '24px',
+      width: '28px',
+      height: '28px',
     },
     footerText: {
-      fontSize: '14px',
+      fontSize: '16px',
+      fontWeight: '600',
       color: '#6e7c7c',
       margin: '10px 0 0',
     },

@@ -5,11 +5,37 @@ import LoadingSpinner from './LoadingSpinner';
 import { getUserOffers } from '../BooksService';
 import { Book } from './Constant';
 import { Helmet } from 'react-helmet';
+import axios from 'axios';
 
 const HomeView: React.FC = () => {
-  const { token, logout } = useAuth();
+  const { token, logout, updateToken, updateUserName, updateEmail, updatePhoneNumber  } = useAuth();
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+    const handleGoogleLogin = async (code: string, scope: string) => {
+      try {
+        const response = await axios.post('https://drugaksiazka.pl/api/auth/v1/google_register/', { code, scope });
+        const data = response?.data;
+        console.log("DATA: " + data)
+        if (data) {
+          updateToken(data.token);
+          updateUserName(data.username);
+          updateEmail(data.email);
+          updatePhoneNumber(data?.phoneNumber);
+        }
+      } catch (error: any) {
+        console.error('Error during Google login:', error.response.data.error[0]);
+      }
+    };
+    useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const scope = urlParams.get('scope')
+  
+      if (code && scope) {
+        handleGoogleLogin(code, scope);
+      }
+    }, []);
 
   useEffect(() => {
     const fetchBooks = async () => {

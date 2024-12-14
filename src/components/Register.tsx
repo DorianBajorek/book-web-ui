@@ -3,6 +3,8 @@ import { registerUser } from '../BooksService';
 import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import ErrorBanner from './Banners/ErrorBanner';
+import GoogleButton from 'react-google-button';
+import axios from 'axios';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -15,6 +17,31 @@ const Register: React.FC = () => {
   const { updateToken, updateUserName, updateEmail, updatePhoneNumber } = useAuth();
   const navigate = useNavigate();
   const popoverRef = useRef<HTMLDivElement>(null);
+
+  const onGoogleLoginSuccess = () => {
+    const GOOGLE_AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
+  
+    const scope = [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile'
+    ].join(' ');
+  
+    // Hardcode the client_id and base API URL directly in the component.
+    const clientId = '894874389822-vus90gg05gp7p6n8g5roor2nibcsli3b.apps.googleusercontent.com';
+    const redirectUri = 'https://drugaksiazka.pl/';
+  
+    const params = {
+      response_type: 'code',
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      prompt: 'select_account',
+      access_type: 'offline',
+      scope
+    };
+  
+    const urlParams = new URLSearchParams(params as Record<string, string>).toString();
+    window.open(`${GOOGLE_AUTH_URL}?${urlParams}`, '_blank', 'noopener,noreferrer');
+  };
 
   const handleRegister = async () => {
     setShowError('');
@@ -30,7 +57,7 @@ const Register: React.FC = () => {
         updateToken(data.token);
         updateUserName(data.username);
         updateEmail(data.email);
-        updatePhoneNumber(data?.phoneNumber)
+        updatePhoneNumber(data?.phoneNumber);
         navigate('/');
       }
     } catch (error: any) {
@@ -128,6 +155,7 @@ const Register: React.FC = () => {
         <button type="button" onClick={handleRegister} style={styles.button}>
           Zarejestruj się
         </button>
+        <GoogleButton onClick={onGoogleLoginSuccess} label="Sign in with Google" />
       </div>
     </div>
   );
@@ -135,6 +163,7 @@ const Register: React.FC = () => {
 
 const styles = {
   pageContainer: {
+    fontFamily: '"Roboto", sans-serif', 
     display: 'flex',
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
@@ -203,6 +232,29 @@ const styles = {
     fontSize: '16px',
     color: '#333',
     zIndex: 10,
+  },
+  googleButton: {
+    display: 'flex',
+    alignItems: 'center' as const,
+    justifyContent: 'center' as const,
+    marginTop: '15px',
+    padding: '10px',
+    borderRadius: '25px',
+    border: '1px solid #e0e0e0',
+    backgroundColor: '#fff',
+    textDecoration: 'none',
+    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+    transition: 'background-color 0.3s',
+    cursor: 'pointer' as const,
+  },
+  googleLogo: {
+    width: '20px',
+    height: '20px',
+    marginRight: '10px',
+  },
+  googleText: {
+    fontSize: '16px',
+    color: '#333',
   },
 };
 
