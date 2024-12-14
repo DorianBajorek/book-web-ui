@@ -94,11 +94,7 @@ const HomeView: React.FC = () => {
       </div>
 
       <div style={styles.buttonContainer}>
-        {token ? (
-          <button style={styles.button} onClick={logout}>
-            Wyloguj się
-          </button>
-        ) : (
+        {!token && (
           <>
             <a href="/rejstracja" style={styles.button}>
               Zarejestruj się
