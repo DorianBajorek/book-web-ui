@@ -57,7 +57,7 @@ const NavMobileView: React.FC = () => {
           </li>
           <li style={styles.navItem}>
                 <a href="/oferty" style={styles.navLink}>Ogłoszenia</a>
-              </li>
+          </li>
           {token ? (
             <>
               <li style={styles.navItem}>
@@ -77,6 +77,9 @@ const NavMobileView: React.FC = () => {
               </li>
             </>
           )}
+          <li style={styles.navItem}>
+                <a href="/kontakt" style={styles.navLink}>Kontakt</a>
+          </li>
         </ul>
       )}
     </nav>
