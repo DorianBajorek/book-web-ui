@@ -162,3 +162,28 @@ export const exportUserOffers = async (token: string) => {
     throw error;
   }
 };
+
+export const updateUserData = async (username: string, phoneNumber: string, token: string) => {
+  try {
+    const payload = {
+      username: username,
+      phoneNumber: phoneNumber,
+    };
+
+    const response = await axios.patch(
+      'https://drugaksiazka.pl/auth/books/v1/update_user_data/',
+      payload,
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    console.error('Error updating user data:', error);
+    throw error;
+  }
+};
