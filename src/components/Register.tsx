@@ -4,7 +4,6 @@ import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import ErrorBanner from './Banners/ErrorBanner';
 import GoogleButton from 'react-google-button';
-import EditProfileModal from './EditProfileModal';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -82,11 +81,6 @@ const Register: React.FC = () => {
 
   return (
     <div style={styles.pageContainer}>
-      <EditProfileModal isOpen={true} onClose={function (): void {
-        throw new Error('Function not implemented.');
-      } } onSave={function (data: { username: string; email: string; phone: string; }): void {
-        throw new Error('Function not implemented.');
-      } } />
       {showError && <ErrorBanner message={showError} />}
       <div style={styles.container}>
         <div style={styles.formGroup}>

@@ -34,7 +34,7 @@ export const loginUser = async (username: string, password: string) => {
       username: username,
       password: password
     };
-    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/logowanie/", payload);
+    const response = await axios.post("https://drugaksiazka.pl/api/auth/v1/login/", payload);
     return response.data;
   } catch (error) {
     throw error;
@@ -163,15 +163,14 @@ export const exportUserOffers = async (token: string) => {
   }
 };
 
-export const updateUserData = async (username: string, phoneNumber: string, token: string) => {
+export const updateUserPhoneNumber = async (phoneNumber: string, token: string) => {
   try {
     const payload = {
-      username: username,
       phoneNumber: phoneNumber,
     };
 
     const response = await axios.patch(
-      'https://drugaksiazka.pl/auth/books/v1/update_user_data/',
+      'https://drugaksiazka.pl/api/auth/v1/update_user_phone_number/',
       payload,
       {
         headers: {
@@ -180,10 +179,8 @@ export const updateUserData = async (username: string, phoneNumber: string, toke
         },
       }
     );
-
-    return response;
+    return response.data;
   } catch (error) {
-    console.error('Error updating user data:', error);
     throw error;
   }
 };
