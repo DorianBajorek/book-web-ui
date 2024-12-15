@@ -3,12 +3,15 @@ import { useAuth } from './UserData';
 import BooksList from './BookList';
 import { useParams } from 'react-router-dom';
 import { getUserData, exportUserOffers } from '../BooksService';
+import EditProfileModal from './EditProfileModal';
+import { CiSettings } from "react-icons/ci";
 
 const Profile = () => {
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const { userLogin } = useParams<{ userLogin: string }>();
   const { login, token } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +25,7 @@ const Profile = () => {
     };
 
     fetchData();
-  }, [userLogin]);
+  }, [userLogin, isModalOpen]);
 
   const handleDownloadBooks = async () => {
     try {
@@ -47,35 +50,52 @@ const Profile = () => {
       console.error('Error downloading user oferty:', error);
     }
   };
-
+  
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
+  
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  }
   return (
-    <div style={styles.profileContainer}>
-      <div style={styles.profileCard}>
-        <img src="/avatar.png" alt="User Avatar" style={styles.avatar} />
-        <div style={styles.infoContainer}>
-          <div style={styles.infoRow}>
-            <span style={styles.label}>Użytkownik:</span>
-            <span style={styles.infoValue}>{userLogin}</span>
-          </div>
-          <div style={styles.infoRow}>
-            <span style={styles.label}>E-mail:</span>
-            <span style={styles.infoValue}>{email}</span>
-          </div>
-          {phoneNumber !== 'undefined' && (
-            <div style={styles.infoRow}>
-              <span style={styles.label}>Telefon:</span>
-              <span style={styles.infoValue}>{phoneNumber}</span>
-            </div>
-          )}
-        </div>
-      </div>
-      {token && (
-        <button type="button" onClick={handleDownloadBooks} style={styles.button}>
-          Pobierz listę książek
-        </button>
+    <>
+      {isModalOpen && (
+        <EditProfileModal onClose={handleCloseModal} />
       )}
-      <BooksList username={userLogin || login} />
-    </div>
+      <div style={styles.profileContainer}>
+        <div style={styles.profileCard}>
+          <img src="/avatar.png" alt="User Avatar" style={styles.avatar} />
+          <div style={styles.infoContainer}>
+            {login === userLogin && (
+              <div style={styles.gearIcon} onClick={handleOpenModal}>
+                <CiSettings />
+              </div>
+            )}
+            <div style={styles.infoRow}>
+              <span style={styles.label}>Użytkownik:</span>
+              <span style={styles.infoValue}>{userLogin}</span>
+            </div>
+            <div style={styles.infoRow}>
+              <span style={styles.label}>E-mail:</span>
+              <span style={styles.infoValue}>{email}</span>
+            </div>
+            {phoneNumber !== 'undefined' && (
+              <div style={styles.infoRow}>
+                <span style={styles.label}>Telefon:</span>
+                <span style={styles.infoValue}>{phoneNumber}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        {login === userLogin && (
+          <button type="button" onClick={handleDownloadBooks} style={styles.button}>
+            Pobierz listę książek
+          </button>
+        )}
+        <BooksList username={userLogin || login} />
+      </div>
+    </>
   );
 };
 
@@ -83,6 +103,7 @@ const styles: {
   profileContainer: CSSProperties;
   profileCard: CSSProperties;
   avatar: CSSProperties;
+  gearIcon: CSSProperties;
   infoContainer: CSSProperties;
   infoRow: CSSProperties;
   label: CSSProperties;
@@ -109,6 +130,7 @@ const styles: {
     maxWidth: '600px',
     width: '90%',
     marginBottom: '20px',
+    position: "relative",
   },
   avatar: {
     width: '18%',
@@ -116,6 +138,13 @@ const styles: {
     borderRadius: '50%',
     marginRight: '20px',
     border: '2px solid #4682b4',
+  },
+  gearIcon: {
+    position: 'absolute',
+    top: '15px',
+    right: '15px',
+    fontSize: '28px',
+    cursor: 'pointer',
   },
   infoContainer: {
     display: 'flex',

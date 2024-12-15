@@ -4,7 +4,6 @@ import { useAuth } from './UserData';
 import { useNavigate } from 'react-router-dom';
 import ErrorBanner from './Banners/ErrorBanner';
 import GoogleButton from 'react-google-button';
-import axios from 'axios';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState('');
