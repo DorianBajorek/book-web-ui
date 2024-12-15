@@ -57,7 +57,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   
   const updateEmail = async (newEmail: string) => {
-    console.log("EMIAL: " + newEmail)
     setEmail(newEmail);
     await AsyncStorage.setItem('email', newEmail);
   };

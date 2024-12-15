@@ -10,7 +10,7 @@ const ResetPassword: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [uid, setUid] = useState<string | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [showError, setShowError] = useState(false); // Dodanie stanu błędu
+  const [showError, setShowError] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,7 +21,7 @@ const ResetPassword: React.FC = () => {
   }, [location.search]);
 
   const handleSendLink = async () => {
-    console.log(`Reset password link sent to: ${email}`);
+
     await requestResetPassword(email);
     setEmailSent(true);
     setTimeout(() => navigate('/logowanie'), 3000);
@@ -29,8 +29,8 @@ const ResetPassword: React.FC = () => {
 
   const handleResetPassword = async () => {
     if (newPassword !== confirmPassword) {
-      setShowError(true); // Ustawienie błędu na true
-      setTimeout(() => setShowError(false), 5000); // Ukrycie błędu po 5 sekundach
+      setShowError(true);
+      setTimeout(() => setShowError(false), 5000);
       return;
     }
     if (uid && token) {
@@ -48,7 +48,7 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div style={styles.pageContainer}>
-      {showError && <ErrorBanner message="Hasła nie pasują do siebie!" />} {/* Wyświetlenie baneru */}
+      {showError && <ErrorBanner message="Hasła nie pasują do siebie!" />}
       <div style={styles.container}>
         {uid && token ? (
           <>

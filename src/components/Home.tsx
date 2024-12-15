@@ -14,7 +14,6 @@ const HomeView: React.FC = () => {
   const handleGoogleLogin = async (code: string, scope: string) => {
     try {
       const data = await registerGoogle(code, scope);
-      console.log(data)
       if (data) {
         updateToken(data.token);
         updateUserName(data.username);
