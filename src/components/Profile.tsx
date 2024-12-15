@@ -14,6 +14,7 @@ const Profile = () => {
     const fetchData = async () => {
       if (userLogin) {
         const data = await getUserData(userLogin);
+        console.log("GETUSERDATA" + data)
         if (data) {
           setEmail(data.email || '');
           setPhoneNumber(data.phoneNumber || '');
