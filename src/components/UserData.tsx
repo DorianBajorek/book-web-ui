@@ -17,6 +17,9 @@ const AuthContext = createContext({
   setIsCreateOfferInProgress: (inProgress: boolean) => {},
   isDeleteOfferInProgress: false,
   setIsDeleteOfferInProgress: (inProgress: boolean) => {},
+  isDeleteUserInProgress: false,
+  setIsDeleteUserInProgress: (inProgress: boolean) => {},
+  deleteUserDetails: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -26,6 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [phoneNumber, setPhoneNumber ] = useState<string>('');
   const [isCreateOfferInProgress, setIsCreateOfferInProgress] = useState(false);
   const [isDeleteOfferInProgress, setIsDeleteOfferInProgress] = useState(false);
+  const [isDeleteUserInProgress, setIsDeleteUserInProgress] = useState(false);
   const [password, setPassword] = useState<string>('');
 
   const loadData = async () => {
@@ -72,10 +76,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const logout = async () => {
+    deleteUserDetails();
+    await AsyncStorage.multiRemove(['token', 'login', 'password', 'email', 'phoneNumber']);
+  };
+
+  const deleteUserDetails = async () => {
     setToken('');
     setLogin('');
     setPassword('');
-    await AsyncStorage.multiRemove(['token', 'login', 'password']);
+    setEmail('');
+    setPhoneNumber('');
+    await AsyncStorage.multiRemove(['token', 'login', 'password', 'email', 'phoneNumber']);
   };
 
   return (
@@ -96,6 +107,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsCreateOfferInProgress,
         isDeleteOfferInProgress,
         setIsDeleteOfferInProgress,
+        isDeleteUserInProgress,
+        setIsDeleteUserInProgress,
+        deleteUserDetails,
       }}
     >
       {children}

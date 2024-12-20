@@ -59,7 +59,7 @@ const Register: React.FC = () => {
         navigate('/');
       }
     } catch (error: any) {
-      setShowError(error.response.data.error[0]);
+      setShowError(error.response.data.error);
       setTimeout(() => setShowError(''), 5000);
     }
   };

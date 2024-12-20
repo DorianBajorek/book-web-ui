@@ -184,3 +184,21 @@ export const updateUserPhoneNumber = async (phoneNumber: string, token: string) 
     throw error;
   }
 };
+
+export const deleteUser = async (token: string) => {
+  try {
+    const response = await axios.delete(
+      'https://drugaksiazka.pl/api/auth/v1/delete_user/',
+      {
+        headers: {
+          Authorization: `Token ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    console.log(response)
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+};
