@@ -15,6 +15,7 @@ import EmailVerification from './components/VerificationView';
 import ResetPassword from './components/ResetPassword';
 import Footer from './components/Footer';
 import ContactView from './components/ContactView';
+import InfoView from './components/InfoView'
 
 function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -46,6 +47,7 @@ function App() {
             <Route path="/verification" element={<EmailVerification />} />
             <Route path="/zmiana-hasla" element={<ResetPassword />} />
             <Route path="/kontakt" element={<ContactView />} />
+            <Route path="/informacje" element={<InfoView />} />
           </Routes>
           <Footer />
         </div>

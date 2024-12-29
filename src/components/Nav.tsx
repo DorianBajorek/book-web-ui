@@ -42,6 +42,9 @@ const Nav: React.FC = () => {
         <li style={styles.navItem}>
           <a href="/kontakt" style={styles.navLink}>Kontakt</a>
         </li>
+        <li style={styles.navItem}>
+          <a href="/informacje" style={styles.navLink}>Informacje</a>
+        </li>
       </ul>
     </nav>
   );
