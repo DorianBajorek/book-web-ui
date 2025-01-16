@@ -15,11 +15,11 @@ export const registerUser = async (email: string, username: string, password: st
     }
   };
 
-  export const registerGoogle = async (code: string, scope: string) => {
+  export const registerGoogle = async (code: string) => {
     try {
       const payload = {
+        type: "web",
         code: code,
-        scope: scope,
       };
       const response = await axios.post('https://drugaksiazka.pl/api/auth/v1/google_register/', payload);
       return response.data

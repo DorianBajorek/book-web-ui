@@ -11,9 +11,9 @@ const HomeView: React.FC = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleGoogleLogin = async (code: string, scope: string) => {
+  const handleGoogleLogin = async (code: string) => {
     try {
-      const data = await registerGoogle(code, scope);
+      const data = await registerGoogle(code);
       if (data) {
         updateToken(data.token);
         updateUserName(data.username);
@@ -27,10 +27,8 @@ const HomeView: React.FC = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
-    const scope = urlParams.get('scope')
-
-    if (code && scope) {
-      handleGoogleLogin(code, scope);
+    if (code) {
+      handleGoogleLogin(code);
     }
   }, []);
 
