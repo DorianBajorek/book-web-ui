@@ -46,6 +46,7 @@ function App() {
             <Route path="/verification" element={<EmailVerification />} />
             <Route path="/zmiana-hasla" element={<ResetPassword />} />
             <Route path="/kontakt" element={<ContactView />} />
+            <Route path="/polityka-prywatnosci" element={<ContactView />} />
           </Routes>
           <Footer />
         </div>
