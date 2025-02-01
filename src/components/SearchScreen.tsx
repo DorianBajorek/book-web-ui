@@ -8,18 +8,20 @@ const SearchScreen = () => {
   const { token } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
-  const [lastAdddedBooks, setLastAddedBooks] =useState<Book[]>([]);
+  const [lastAddedBooks, setLastAddedBooks] = useState<Book[]>([]);
+  const [pageNumber, setPageNumber] = useState(0);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const PAGE_SIZE = 10;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getLastAddedOffers();
+        const data = await getLastAddedOffers(PAGE_SIZE, 0);
         if (data) {
           setLastAddedBooks(data);
         }
       } catch (error) {
-        console.error('Error fetching last added oferty:', error);
+        console.error('Error fetching last added offers:', error);
       }
     };
 
@@ -42,7 +44,7 @@ const SearchScreen = () => {
           setSearchedBooks(data);
         }
       } catch (error) {
-        console.error('Error fetching search searchedBooks:', error);
+        console.error('Error fetching search results:', error);
       }
     }, 500);
 
@@ -52,6 +54,40 @@ const SearchScreen = () => {
       }
     };
   }, [searchQuery, token]);
+
+  const handleScroll = async () => {
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    if (scrollY + windowHeight >= documentHeight - 10) {
+      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (pageNumber === 0) return;
+
+    const fetchMoreBooks = async () => {
+      try {
+        const data = await getLastAddedOffers(PAGE_SIZE, pageNumber);
+        if (data) {
+          setLastAddedBooks((prevBooks) => [...prevBooks, ...data]);
+        }
+      } catch (error) {
+        console.error('Error fetching more books:', error);
+      }
+    };
+
+    fetchMoreBooks();
+  }, [pageNumber]);
 
   return (
     <div style={containerStyle}>
@@ -68,15 +104,14 @@ const SearchScreen = () => {
       <div style={resultsContainerStyle}>
         {searchedBooks.length > 0 ? (
           <OffersList books={searchedBooks} />
-        ): searchedBooks.length === 0 ? (
+        ) : searchedBooks.length === 0 ? (
           <>
             <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
-            <OffersList books={lastAdddedBooks} />
+            <OffersList books={lastAddedBooks} />
           </>
-        ) : 
-        <>
+        ) : (
           <p style={noResultsTextStyle}>Brak wyników</p>
-        </>}
+        )}
       </div>
     </div>
   );
