@@ -115,6 +115,10 @@ export const getOffersByQuery = async (token: string, searchQuery: string) => {
   try {
     const url = `https://drugaksiazka.pl/api/books/v1/search_users_with_title/?searchQuery=${encodeURIComponent(searchQuery)}`;
     const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
+      },
     });
     return response.data;
   } catch (error) {
