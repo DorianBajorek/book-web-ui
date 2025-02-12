@@ -16,7 +16,7 @@ const OffersList = ({ books }: OffersListProps) => {
         >
           {item.frontImage && (
             <img
-              src={item.frontImage.replace('http', 'https')}
+              src={(item.smallfrontImage || item.frontImage).replace('http', 'https')}
               alt={`${item.title} cover`}
               style={bookImageStyle}
             />

@@ -80,16 +80,28 @@ const BookDetails: React.FC = () => {
   if (!book) {
     return <LoadingSpinner visible={true} />;
   }
-
+  
   const images = [
-    ...(book.frontImage ? [{ id: '2', image: { uri: book.frontImage.replace("http", "https") } }] : []),
-    ...(book.backImage ? [{ id: '3', image: { uri: book.backImage.replace("http", "https") } }] : []),
+    ...(book.smallfrontImage || book.frontImage
+      ? [{
+          id: '2',
+          small: book.smallfrontImage ? book.smallfrontImage.replace("http", "https") : null,
+          large: book.frontImage ? book.frontImage.replace("http", "https") : null,
+        }]
+      : []),
+    ...(book.smallbackImage || book.backImage
+      ? [{
+          id: '3',
+          small: book.smallbackImage ? book.smallbackImage.replace("http", "https") : null,
+          large: book.backImage ? book.backImage.replace("http", "https") : null,
+        }]
+      : []),
   ];
-
-  const handleImageClick = (uri: string) => {
-    setSelectedImage(uri);
+  
+  const handleImageClick = (image: { small: string | null; large: string | null }) => {
+    setSelectedImage(image.large || image.small);
   };
-
+  
   const handleCloseModal = () => {
     setSelectedImage(null);
   };
@@ -101,16 +113,16 @@ const BookDetails: React.FC = () => {
         <meta name="description" content={book.author + ", " + book.title} />
       </Helmet>
       <div style={cardStyle}>
-        <CloseButton onPress={handleBack}/>
+        <CloseButton onPress={handleBack} />
         <h2 style={bookTitleStyle}>{book.title}</h2>
         <div style={isMobile ? mobileImagesContainerStyle : imagesContainerStyle}>
           {images.map((image) => (
             <div key={image.id} style={isMobile ? mobileBookContainerStyle : bookContainerStyle}>
               <img
-                src={image.image.uri}
+                src={image.small || image.large || ""}
                 alt={`Book image ${image.id}`}
                 style={isMobile ? mobileBookImageStyle : bookImageStyle}
-                onClick={() => handleImageClick(image.image.uri)}
+                onClick={() => handleImageClick(image)}
               />
             </div>
           ))}
@@ -140,7 +152,7 @@ const BookDetails: React.FC = () => {
         </div>
       )}
     </div>
-  );
+  );  
 };
 
 const mobileImagesContainerStyle: React.CSSProperties = {

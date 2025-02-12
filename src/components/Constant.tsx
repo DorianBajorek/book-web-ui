@@ -6,5 +6,7 @@ export interface Book {
     username?: string;
     frontImage: string;
     backImage: string;
+    smallfrontImage?: string;
+    smallbackImage?: string;
     price?: string;
   }
