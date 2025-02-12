@@ -82,7 +82,7 @@ const HomeView: React.FC = () => {
           <BookSlider
             books={books.map((book) => ({
               id: book.offer_id.toString(),
-              image: book.frontImage.replace('http', 'https'),
+              image: book.smallfrontImage?.replace('http', 'https') || book.frontImage.replace('http', 'https'),
               title: book.title,
             }))}
           />
