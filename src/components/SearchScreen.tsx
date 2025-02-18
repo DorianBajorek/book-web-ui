@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getLastAddedOffers, getOffersByQuery } from '../BooksService';
+import { getLastAddedOffers, getOffersByQueryLazy } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
 import OffersList from './OffersList';
@@ -9,8 +9,10 @@ const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
   const [lastAddedBooks, setLastAddedBooks] = useState<Book[]>([]);
-  const [pageNumber, setPageNumber] = useState(0);
+  const [searchPageNumber, setSearchPageNumber] = useState(0);
+  const [lastAddedPageNumber, setLastAddedPageNumber] = useState(0);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isFetchingRef = useRef(false);
   const PAGE_SIZE = 10;
 
   useEffect(() => {
@@ -24,13 +26,13 @@ const SearchScreen = () => {
         console.error('Error fetching last added offers:', error);
       }
     };
-
     fetchData();
   }, [token]);
 
   useEffect(() => {
-    if (searchQuery.trim() === '') {
+    if (searchQuery === '') {
       setSearchedBooks([]);
+      setSearchPageNumber(0);
       return;
     }
     if (debounceTimeout.current) {
@@ -39,9 +41,10 @@ const SearchScreen = () => {
 
     debounceTimeout.current = setTimeout(async () => {
       try {
-        const data = await getOffersByQuery(token, searchQuery);
+        const data = await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, 0);
         if (data) {
           setSearchedBooks(data);
+          setSearchPageNumber(0);
         }
       } catch (error) {
         console.error('Error fetching search results:', error);
@@ -55,13 +58,19 @@ const SearchScreen = () => {
     };
   }, [searchQuery, token]);
 
-  const handleScroll = async () => {
+  const handleScroll = () => {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
 
-    if (scrollY + windowHeight >= documentHeight - 10) {
-      setPageNumber((prevPageNumber) => prevPageNumber + 1);
+    if (scrollY + windowHeight >= documentHeight - 10 && !isFetchingRef.current) {
+      isFetchingRef.current = true;
+      
+      if (searchQuery !== '') {
+        setSearchPageNumber((prev) => prev + 1);
+      } else {
+        setLastAddedPageNumber((prev) => prev + 1);
+      }
     }
   };
 
@@ -70,24 +79,45 @@ const SearchScreen = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  });
 
   useEffect(() => {
-    if (pageNumber === 0) return;
+    if (searchPageNumber === 0 || searchQuery === '') return;
 
     const fetchMoreBooks = async () => {
       try {
-        const data = await getLastAddedOffers(PAGE_SIZE, pageNumber);
-        if (data) {
-          setLastAddedBooks((prevBooks) => [...prevBooks, ...data]);
+        const data = (await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, searchPageNumber)) || [];
+        if (data.length > 0) {
+          setSearchedBooks((prevBooks) => [...prevBooks, ...data]);
         }
       } catch (error) {
-        console.error('Error fetching more books:', error);
+        console.error('Error fetching more search results:', error);
+      } finally {
+        isFetchingRef.current = false;
       }
     };
 
     fetchMoreBooks();
-  }, [pageNumber]);
+  }, [searchPageNumber]);
+
+  useEffect(() => {
+    if (lastAddedPageNumber === 0 || searchQuery !== '') return;
+
+    const fetchMoreBooks = async () => {
+      try {
+        const data = (await getLastAddedOffers(PAGE_SIZE, lastAddedPageNumber)) || [];
+        if (data.length > 0) {
+          setLastAddedBooks((prevBooks) => [...prevBooks, ...data]);
+        }
+      } catch (error) {
+        console.error('Error fetching more last added books:', error);
+      } finally {
+        isFetchingRef.current = false;
+      }
+    };
+
+    fetchMoreBooks();
+  }, [lastAddedPageNumber]);
 
   return (
     <div style={containerStyle}>
@@ -104,13 +134,11 @@ const SearchScreen = () => {
       <div style={resultsContainerStyle}>
         {searchedBooks.length > 0 ? (
           <OffersList books={searchedBooks} />
-        ) : searchedBooks.length === 0 ? (
+        ) : (
           <>
             <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
             <OffersList books={lastAddedBooks} />
           </>
-        ) : (
-          <p style={noResultsTextStyle}>Brak wyników</p>
         )}
       </div>
     </div>
@@ -155,13 +183,6 @@ const resultsContainerStyle: React.CSSProperties = {
   width: '100%',
   maxWidth: '900px',
   marginTop: '20px',
-};
-
-const noResultsTextStyle: React.CSSProperties = {
-  fontSize: '16px',
-  color: '#888',
-  textAlign: 'center',
-  marginTop: '30px',
 };
 
 export default SearchScreen;
