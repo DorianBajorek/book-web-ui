@@ -11,6 +11,7 @@ const SearchScreen = () => {
   const [lastAddedBooks, setLastAddedBooks] = useState<Book[]>([]);
   const [searchPageNumber, setSearchPageNumber] = useState(0);
   const [lastAddedPageNumber, setLastAddedPageNumber] = useState(0);
+  const [hasNotResults, setHasNotResults] = useState(false);
   const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFetchingRef = useRef(false);
   const PAGE_SIZE = 10;
@@ -33,6 +34,7 @@ const SearchScreen = () => {
     if (searchQuery === '') {
       setSearchedBooks([]);
       setSearchPageNumber(0);
+      setHasNotResults(false);
       return;
     }
     if (debounceTimeout.current) {
@@ -42,9 +44,13 @@ const SearchScreen = () => {
     debounceTimeout.current = setTimeout(async () => {
       try {
         const data = await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, 0);
-        if (data) {
+        if (data && data.length > 0) {
           setSearchedBooks(data);
           setSearchPageNumber(0);
+          setHasNotResults(false);
+        } else {
+          setSearchedBooks([]);
+          setHasNotResults(true);
         }
       } catch (error) {
         console.error('Error fetching search results:', error);
@@ -57,6 +63,13 @@ const SearchScreen = () => {
       }
     };
   }, [searchQuery, token]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  });
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -73,13 +86,6 @@ const SearchScreen = () => {
       }
     }
   };
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  });
 
   useEffect(() => {
     if (searchPageNumber === 0 || searchQuery === '') return;
@@ -134,6 +140,8 @@ const SearchScreen = () => {
       <div style={resultsContainerStyle}>
         {searchedBooks.length > 0 ? (
           <OffersList books={searchedBooks} />
+        ) : hasNotResults ? (
+          <h2 style={noResultsTextStyle}>Brak wyników</h2>
         ) : (
           <>
             <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
@@ -185,4 +193,11 @@ const resultsContainerStyle: React.CSSProperties = {
   marginTop: '20px',
 };
 
+const noResultsTextStyle: React.CSSProperties = {
+  fontSize: '20px',
+  fontWeight: 'bold',
+  color: '#d9534f',
+  textAlign: 'center',
+  marginTop: '20px',
+};
 export default SearchScreen;
