@@ -6,6 +6,7 @@ import { getUserData, exportUserOffers } from '../BooksService';
 import EditProfileModal from './EditProfileModal';
 import { CiSettings } from "react-icons/ci";
 import LoadingSpinner from './LoadingSpinner';
+import { Helmet } from 'react-helmet';
 
 const Profile = () => {
   const [email, setEmail] = useState('');
@@ -71,6 +72,12 @@ const Profile = () => {
 
   return (
     <>
+    <Helmet>
+      <title>Profil użytkownika {userLogin} - Drugaksiazka.pl</title>
+      <meta name="description" content={`Zobacz profil użytkownika ${userLogin} i sprawdź jego książki na sprzedaż.`} />
+      <meta property="og:title" content={`Profil użytkownika ${userLogin}`} />
+      <meta property="og:description" content={`Sprawdź książki wystawione na sprzedaż przez ${userLogin} na Drugaksiazka.pl`} />
+    </Helmet>
       <LoadingSpinner visible={isDeleteUserInProgress} />
       {isModalOpen && (
         <EditProfileModal onClose={handleCloseModal} />
