@@ -1,129 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getLastAddedOffers, getOffersByQueryLazy } from '../BooksService';
 import { useAuth } from './UserData';
 import { Book } from './Constant';
 import OffersList from './OffersList';
+import LoadingSpinner from './LoadingSpinner';
+
+const PAGE_SIZE = 10;
 
 const SearchScreen = () => {
   const { token } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchedBooks, setSearchedBooks] = useState<Book[]>([]);
-  const [lastAddedBooks, setLastAddedBooks] = useState<Book[]>([]);
-  const [searchPageNumber, setSearchPageNumber] = useState(0);
-  const [lastAddedPageNumber, setLastAddedPageNumber] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchQuery = searchParams.get('query') || '';
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const [loadingPage, setLoadingPage] = useState(false);
+  
+  const [books, setBooks] = useState<Book[]>([]);
   const [hasNotResults, setHasNotResults] = useState(false);
-  const debounceTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isFetchingRef = useRef(false);
-  const PAGE_SIZE = 10;
-
+  const [totalPages, setTotalPages] = useState(1);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getLastAddedOffers(PAGE_SIZE, 0);
-        if (data) {
-          setLastAddedBooks(data);
+        let data;
+        setLoadingPage(true);
+        if (searchQuery) {
+          data = await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, page - 1);
+        } else {
+          data = await getLastAddedOffers(PAGE_SIZE, page - 1);
         }
-      } catch (error) {
-        console.error('Error fetching last added offers:', error);
-      }
-    };
-    fetchData();
-  }, [token]);
-
-  useEffect(() => {
-    if (searchQuery === '') {
-      setSearchedBooks([]);
-      setSearchPageNumber(0);
-      setHasNotResults(false);
-      return;
-    }
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
-    }
-
-    debounceTimeout.current = setTimeout(async () => {
-      try {
-        const data = await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, 0);
         if (data && data.length > 0) {
-          setSearchedBooks(data);
-          setSearchPageNumber(0);
+          setBooks(data);
+          setTotalPages(data[0].total_pages);
           setHasNotResults(false);
         } else {
-          setSearchedBooks([]);
+          setBooks([]);
           setHasNotResults(true);
         }
       } catch (error) {
-        console.error('Error fetching search results:', error);
-      }
-    }, 500);
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
+        console.error('Error fetching books:', error);
+      } finally {
+        setLoadingPage(false);
       }
     };
-  }, [searchQuery, token]);
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  });
+    fetchData();
+  }, [searchQuery, page, token]);
 
-  const handleScroll = () => {
-    const scrollY = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (scrollY + windowHeight >= documentHeight - 10 && !isFetchingRef.current) {
-      isFetchingRef.current = true;
-      
-      if (searchQuery !== '') {
-        setSearchPageNumber((prev) => prev + 1);
-      } else {
-        setLastAddedPageNumber((prev) => prev + 1);
-      }
-    }
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams({ query: e.target.value, page: '1' });
   };
 
-  useEffect(() => {
-    if (searchPageNumber === 0 || searchQuery === '') return;
-
-    const fetchMoreBooks = async () => {
-      try {
-        const data = (await getOffersByQueryLazy(token, searchQuery, PAGE_SIZE, searchPageNumber)) || [];
-        if (data.length > 0) {
-          setSearchedBooks((prevBooks) => [...prevBooks, ...data]);
-        }
-      } catch (error) {
-        console.error('Error fetching more search results:', error);
-      } finally {
-        isFetchingRef.current = false;
-      }
-    };
-
-    fetchMoreBooks();
-  }, [searchPageNumber]);
-
-  useEffect(() => {
-    if (lastAddedPageNumber === 0 || searchQuery !== '') return;
-
-    const fetchMoreBooks = async () => {
-      try {
-        const data = (await getLastAddedOffers(PAGE_SIZE, lastAddedPageNumber)) || [];
-        if (data.length > 0) {
-          setLastAddedBooks((prevBooks) => [...prevBooks, ...data]);
-        }
-      } catch (error) {
-        console.error('Error fetching more last added books:', error);
-      } finally {
-        isFetchingRef.current = false;
-      }
-    };
-
-    fetchMoreBooks();
-  }, [lastAddedPageNumber]);
+  const handlePageChange = (newPage: number) => {
+    window.scrollTo({ top: 0 });
+    setSearchParams({ query: searchQuery, page: newPage.toString() });
+  };
 
   return (
     <div style={containerStyle}>
@@ -134,20 +65,33 @@ const SearchScreen = () => {
           type="text"
           placeholder="Wyszukaj..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={handleSearchChange}
         />
       </div>
       <div style={resultsContainerStyle}>
-        {searchedBooks.length > 0 ? (
-          <OffersList books={searchedBooks} />
+        <LoadingSpinner visible={loadingPage} />
+        {books.length > 0 ? (
+          <OffersList books={books} />
         ) : hasNotResults ? (
           <h2 style={noResultsTextStyle}>Brak wyników</h2>
-        ) : (
-          <>
-            <h1 style={titleTextStyle}>Ostatnio dodane ogłoszenia</h1>
-            <OffersList books={lastAddedBooks} />
-          </>
-        )}
+        ) : null}
+      </div>
+      <div style={paginationStyle}>
+        <button 
+          style={{ ...paginationButtonStyle, ...(page > 1 ? paginationButtonHoverStyle : {}) }} 
+          disabled={page <= 1} 
+          onClick={() => handlePageChange(page - 1)}
+        >
+          Poprzednia
+        </button>
+        <span style={paginationTextStyle}>Strona {page} z {totalPages}</span>
+        <button 
+          style={{ ...paginationButtonStyle, ...(page < totalPages ? paginationButtonHoverStyle : {}) }} 
+          disabled={page >= totalPages} 
+          onClick={() => handlePageChange(page + 1)}
+        >
+          Następna
+        </button>
       </div>
     </div>
   );
@@ -200,4 +144,37 @@ const noResultsTextStyle: React.CSSProperties = {
   textAlign: 'center',
   marginTop: '20px',
 };
+
+const paginationStyle: React.CSSProperties = {
+  marginTop: '20px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '10px',
+};
+
+const paginationButtonStyle: React.CSSProperties = {
+  padding: '8px 12px',
+  borderRadius: '6px',
+  border: '1px solid #007bff',
+  backgroundColor: 'transparent',
+  color: '#007bff',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: '500',
+  transition: 'all 0.3s ease',
+  outline: 'none',
+};
+
+const paginationButtonHoverStyle: React.CSSProperties = {
+  backgroundColor: '#007bff',
+  color: '#fff',
+};
+
+const paginationTextStyle: React.CSSProperties = {
+  fontSize: '16px',
+  fontWeight: 'bold',
+  color: '#333',
+};
+
 export default SearchScreen;

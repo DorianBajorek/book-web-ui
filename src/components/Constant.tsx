@@ -9,4 +9,5 @@ export interface Book {
     smallfrontImage?: string;
     smallbackImage?: string;
     price?: string;
+    total_pages?: string
   }
