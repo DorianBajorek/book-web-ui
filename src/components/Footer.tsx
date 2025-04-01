@@ -2,12 +2,6 @@ const Footer: React.FC = () => {
   return (
     <div style={styles.footerContainer}>
       <div style={styles.linkContainer}>
-        <a href="https://www.instagram.com/drugaksiazka_official/" target="_blank" rel="noopener noreferrer" style={styles.link}>
-          <img src="/instagram-logo.png" alt="Instagram" style={styles.icon} />
-        </a>
-        <a href="/polityka-prywatnosci" style={styles.privacyButton}>
-          Polityka Prywatności
-        </a>
       </div>
       <p style={styles.footerText}>© 2024 Drugaksiazka.pl. Wszystkie prawa zastrzeżone.</p>
     </div>
